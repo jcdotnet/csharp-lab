@@ -1,0 +1,32 @@
+﻿<Window x:Class="MessengerWPF.Chat"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Window1" Height="500" Width="400" Closing="Window_Closing">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+ 
+        <TextBox Grid.Row="0" Name="tbMensajes"  IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" BorderThickness="0" />
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0" Name="tbEntrada" TextWrapping="Wrap" AcceptsReturn="True" Width="278" />
+            <Button Grid.Column="1" Name="btEnviar" Height="50" Click="btEnviar_Click">¡Enviar mensaje!</Button>
+        </Grid>
+        <ToolBarTray Grid.Row="2">
+            <ToolBar>          
+                <Button Name="btStartAudio" Click="btStartAudio_Click">Hablar</Button>
+                <Button Name="btStopAudio" IsEnabled="False" Click="btStopAudio_Click">Colgar</Button>
+                <Separator/>
+                <Button Name="btAgregar" IsEnabled="True" Click="btAgregar_Click">Agregar participante</Button>                            
+        </ToolBar>
+        </ToolBarTray>
+
+    </Grid>
+</Window>

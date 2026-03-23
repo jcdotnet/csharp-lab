@@ -1,0 +1,17 @@
+﻿<Window x:Class="MessengerWPF.Registro"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Registro" Height="300" Width="300" ResizeMode="NoResize">
+    <Grid>
+        <StackPanel Width="200" HorizontalAlignment="Center">
+            <Label Name="lbLogin" Content="Nuevo usuario" HorizontalContentAlignment="Center" FontSize="14" FontFamily="Segoe UI"></Label>
+            <Label Name="lbUsuario" Content="Usuario:" Height="Auto"></Label>
+            <TextBox Name="tbUsuario" />
+            <Label Name="lbPassword" Content="Contraseña:"></Label>
+            <PasswordBox Name="tbPassword" />
+            <Label Name="lbPassword2" Content="Repita contraseña:"></Label>
+            <PasswordBox Name="tbPassword2" />
+            <Button Name="btEntrar" Content="Registrar" HorizontalAlignment="Center" Width="100" Margin="0,10,0,20" Click="btRegistrar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

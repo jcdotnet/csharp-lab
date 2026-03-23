@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="MenuAcercaDe">About</system:String>
+    <system:String x:Key="MenuAyuda">Help</system:String>
+    <system:String x:Key="MenuCerrarSesion">Sign out</system:String>
+    <system:String x:Key="MenuCuenta">Account</system:String>
+    <system:String x:Key="MenuIdioma">Language</system:String>
+    <system:String x:Key="MenuInicio">Start</system:String>
+    <system:String x:Key="MenuOpciones">Settings</system:String>
+    <system:String x:Key="MenuPerfil">Profile</system:String>
+    <system:String x:Key="MenuSalir">Close</system:String>
+    <system:String x:Key="SesionNoIniciada">Messenger (not signed in)</system:String>
+    <system:String x:Key="LabelIniciarSesion">Sign in</system:String>
+    <system:String x:Key="LabelUsuario">User:</system:String>
+    <system:String x:Key="LabelPassword">Password:</system:String>
+    <system:String x:Key="BotonIniciarSesion">Sign in</system:String>
+    <system:String x:Key="TextBlockCuenta">Don't have a Messenger account?</system:String>
+    <system:String x:Key="TextBlockProblemas">Can't access your account?</system:String>
+    <system:String x:Key="LinkRegistro">Sign up!</system:String>
+    <system:String x:Key="LinkPassword">Click here to recover your password</system:String>
+
+</ResourceDictionary>
