@@ -32,7 +32,7 @@ namespace MessengerServer
         
         #region IP y PUERTO del servidor
 
-        private const string SERVER_IP = "192.168.1.100"; // "192.168.1.200"; // "192.168.1.57"; //
+        private const string SERVER_IP = "192.168.1.45";
         private const int MESSAGES_PORT = 4660; 
         private const int VOICE_PORT = 4661; // servidor de voz de WPF Messenger
 

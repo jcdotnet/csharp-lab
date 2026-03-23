@@ -24,7 +24,7 @@ namespace MessengerWPF
     /// </summary>
     public partial class Messenger : Window
     {
-        public const string SERVER_IP = "192.168.1.100"; // "85.137.124.174"; // "192.168.1.57"; // 
+        public const string SERVER_IP = "192.168.1.45";
         public const int SERVER_PORT = 4660;
         public const int SERVER_AUDIO = 4661;         
 
@@ -38,7 +38,7 @@ namespace MessengerWPF
             MainWindow.notifyIcon.Visible = true;
             MainWindow.notifyIcon.Text = MessengerWPF.Properties.Resources.SesionNoIniciada; 
             // icono: props del archivo -> acción de compilación: recurso incrustado, copiar en dir si es posterior
-            MainWindow.notifyIcon.Icon = new System.Drawing.Icon("Images/logo16.png");        
+            MainWindow.notifyIcon.Icon = new System.Drawing.Icon("Images/logo16.ico");        
         }        
 
         private void linkPassWord_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
