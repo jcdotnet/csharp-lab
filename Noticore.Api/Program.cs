@@ -3,6 +3,8 @@ using Noticore.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+
 // Add Infrastructure services to the container
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -12,5 +14,6 @@ builder.Services.AddApplication();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
