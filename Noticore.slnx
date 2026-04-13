@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Noticore.Api/Noticore.Api.csproj" />
+  <Project Path="Noticore.Application/Noticore.Application.csproj" />
+  <Project Path="Noticore.Domain/Noticore.Domain.csproj" />
+  <Project Path="Noticore.Infrastructure/Noticore.Infrastructure.csproj" />
+</Solution>
