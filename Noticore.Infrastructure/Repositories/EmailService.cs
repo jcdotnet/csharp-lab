@@ -1,4 +1,6 @@
-﻿using Noticore.Application.Interfaces;
+﻿using MailKit.Net.Smtp;
+using MimeKit;
+using Noticore.Application.Interfaces;
 using Polly;
 using Polly.Retry;
 
@@ -25,7 +27,23 @@ namespace Noticore.Infrastructure.Repositories
                 // To test the retry, we could uncomment the next line:
                 // throw new Exception("Temporary connection issue");
 
-                // here goes the email sending logic
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse("info@josecarlosroman.com"));
+                email.To.Add(MailboxAddress.Parse(to));
+                email.Subject = subject;
+                email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
+
+                using var client = new SmtpClient();
+
+                // Connect to the SMTP server (using Mailtrap for testing)
+                await client.ConnectAsync("sandbox.smtp.mailtrap.io", 587, MailKit.Security.SecureSocketOptions.StartTls);
+
+                // Authenticate with your credentials
+                await client.AuthenticateAsync("d54582f6f30fdf", "18c6528c57fce1");
+
+                await client.SendAsync(email);
+                await client.DisconnectAsync(true);
+
                 Console.WriteLine($"[EMAIL SENT] To: {to} | Subject: {subject}");
                 return Task.CompletedTask;
             });

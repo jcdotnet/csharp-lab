@@ -1,5 +1,6 @@
 using Noticore.Api.Middleware;
 using Noticore.Application;
+using Noticore.Application.Interfaces;
 using Noticore.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
