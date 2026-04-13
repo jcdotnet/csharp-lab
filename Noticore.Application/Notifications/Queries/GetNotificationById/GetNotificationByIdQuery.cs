@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Noticore.Application.Interfaces;
 using Noticore.Application.Notifications.Dtos;
-using Noticore.Domain.Entities;
 
 namespace Noticore.Application.Notifications.Queries.GetNotificationById
 {
@@ -18,7 +17,6 @@ namespace Noticore.Application.Notifications.Queries.GetNotificationById
             var n = await repository.GetByIdAsync(request.Id);
             if (n == null) return null;
 
-            // 2. Map Entity to DTO
             return new NotificationDto(
                 n.Id, n.Title, n.Message, n.Recipient,
                 n.Type.ToString(), n.Status.ToString(), n.CreatedAt);

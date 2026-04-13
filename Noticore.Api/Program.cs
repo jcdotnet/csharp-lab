@@ -1,3 +1,4 @@
+using Noticore.Api.Middleware;
 using Noticore.Application;
 using Noticore.Infrastructure;
 
@@ -11,7 +12,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Add Application services to the container
 builder.Services.AddApplication();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 app.MapControllers();
