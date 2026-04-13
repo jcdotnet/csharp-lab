@@ -1,18 +1,30 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Noticore.Application.Notifications.Commands.CreateNotification;
 using Noticore.Application.Notifications.Queries.GetNotifications;
+using System.ComponentModel.DataAnnotations;
 
 namespace Noticore.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // Using Primary Constructor to inject ISender (MediatR)
-    public class NotificationsController(ISender sender) : ControllerBase
+    // Using Primary Constructor to inject ISender (MediatR) and the validator
+    public class NotificationsController(
+        ISender sender, 
+        IValidator<CreateNotificationCommand> validator) : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> Create(CreateNotificationCommand command)
         {
+            // Manual validation
+            var validationResult = await validator.ValidateAsync(command);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             // The controller only delegates the command to MediatR
             var result = await sender.Send(command);
 

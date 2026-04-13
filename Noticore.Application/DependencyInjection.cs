@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Noticore.Application
 {
@@ -9,6 +10,9 @@ namespace Noticore.Application
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             });
+
+            // Fluent validation
+            services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
             return services;
         }
