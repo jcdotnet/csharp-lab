@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Noticore.Domain.Enums
+﻿namespace Noticore.Domain.Enums
 {
-    internal class NotificationStatus
+    public enum NotificationStatus
     {
+        Pending,
+        Sent,
+        Failed
     }
 }
