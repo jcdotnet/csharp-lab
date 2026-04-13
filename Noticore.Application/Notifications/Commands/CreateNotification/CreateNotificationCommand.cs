@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Noticore.Application.Interfaces;
+using Noticore.Application.Notifications.Events;
 using Noticore.Domain.Entities;
 using Noticore.Domain.Enums;
 
@@ -13,14 +14,17 @@ namespace Noticore.Application.Notifications.Commands.CreateNotification
     string Recipient,
     NotificationType Type) : IRequest<Guid>; // We expect the ID of the created notification as a result
 
-    // The handler: Contains the business logic to process the Command.
+    // The handler: Contains the business logic to process the Command. This now acts as a Publisher too: 
+    // After persisting the notification, it triggers a Domain Event to decouple side effects (sending emails).
     public class CreateNotificationHandler : IRequestHandler<CreateNotificationCommand, Guid>
     {
         private readonly INotificationRepository _repository;
+        private readonly IPublisher _publisher;
 
-        public CreateNotificationHandler(INotificationRepository repository)
+        public CreateNotificationHandler(INotificationRepository repository, IPublisher publisher)
         {
             _repository = repository;
+            _publisher = publisher;
         }
 
         public async Task<Guid> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
@@ -38,6 +42,9 @@ namespace Noticore.Application.Notifications.Commands.CreateNotification
 
             // Persistence via Repository
             await _repository.AddAsync(notification);
+
+            // We publish the event. We don't wait for the email to finish here!
+            await _publisher.Publish(new NotificationCreatedEvent(notification), cancellationToken);
 
             return notification.Id;
         }
