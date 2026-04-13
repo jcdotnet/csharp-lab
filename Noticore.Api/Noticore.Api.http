@@ -12,4 +12,7 @@ Content-Type: application/json
   "type": 0
 }
 
+### Get all notifications
+GET {{Noticore.Api_HostAddress}}/api/notifications
+
 ###

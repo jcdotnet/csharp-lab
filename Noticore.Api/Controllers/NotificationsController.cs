@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Noticore.Application.Notifications.Commands.CreateNotification;
+using Noticore.Application.Notifications.Queries.GetNotifications;
 
 namespace Noticore.Api.Controllers
 {
@@ -17,6 +18,13 @@ namespace Noticore.Api.Controllers
 
             // Return 201 Created with the generated ID
             return CreatedAtAction(nameof(Create), new { id = result }, result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await sender.Send(new GetNotificationsQuery());
+            return Ok(result);
         }
     }
 }
