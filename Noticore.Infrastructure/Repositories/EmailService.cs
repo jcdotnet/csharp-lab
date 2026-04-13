@@ -39,7 +39,7 @@ namespace Noticore.Infrastructure.Repositories
                 await client.ConnectAsync("sandbox.smtp.mailtrap.io", 587, MailKit.Security.SecureSocketOptions.StartTls);
 
                 // Authenticate with your credentials
-                await client.AuthenticateAsync("d54582f6f30fdf", "18c6528c57fce1");
+                await client.AuthenticateAsync("mailtrap_username_here", "mailtrap_password_here");
 
                 await client.SendAsync(email);
                 await client.DisconnectAsync(true);
