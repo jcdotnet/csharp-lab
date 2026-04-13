@@ -1,0 +1,6 @@
+@Noticore.Api_HostAddress = http://localhost:5020
+
+GET {{Noticore.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
