@@ -4,12 +4,12 @@ using Noticore.Application.Interfaces;
 using Polly;
 using Polly.Retry;
 
-namespace Noticore.Infrastructure.Repositories
+namespace Noticore.Infrastructure.Services
 {
-    public class EmailService : IEmailService
+    public class SmtpEmailService : IEmailService
     {
         private readonly AsyncRetryPolicy _retryPolicy; // Policy as a field to keep the code clean
-        public EmailService()
+        public SmtpEmailService()
         {
             _retryPolicy = Policy // Retry 3 times, waiting 2 seconds between each attempt
                 .Handle<Exception>()
