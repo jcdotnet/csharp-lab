@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Noticore.Application.Notifications.Commands.CreateNotification;
 using Noticore.Application.Notifications.Queries.GetNotificationById;
 using Noticore.Application.Notifications.Queries.GetNotifications;
-using System.ComponentModel.DataAnnotations;
 
 namespace Noticore.Api.Controllers
 {
