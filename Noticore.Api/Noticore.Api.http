@@ -15,4 +15,8 @@ Content-Type: application/json
 ### Get all notifications
 GET {{Noticore.Api_HostAddress}}/api/notifications
 
+### Get a specific notification
+@notificationId = d967ca67-eeb7-451b-8565-c50a51e836bc
+GET {{Noticore.Api_HostAddress}}/api/notifications/{{notificationId}}
+
 ###

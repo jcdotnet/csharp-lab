@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Noticore.Application.Notifications.Commands.CreateNotification;
+using Noticore.Application.Notifications.Queries.GetNotificationById;
 using Noticore.Application.Notifications.Queries.GetNotifications;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,6 +37,19 @@ namespace Noticore.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await sender.Send(new GetNotificationsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await sender.Send(new GetNotificationByIdQuery(id));
+            
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             return Ok(result);
         }
     }

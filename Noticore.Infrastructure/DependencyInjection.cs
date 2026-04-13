@@ -20,6 +20,9 @@ namespace Noticore.Infrastructure
             // Repositories
             services.AddScoped<INotificationRepository, NotificationRepository>();
 
+            // Simulated Email Service
+            services.AddTransient<IEmailService, EmailService>();
+
             return services;
         }
     }
