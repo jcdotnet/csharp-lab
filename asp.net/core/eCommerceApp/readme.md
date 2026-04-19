@@ -1,21 +1,16 @@
-## eCommerce Demo App
-This codebase was created to demonstrate a microservices-based application built with ASP.NET Core.
+# Cloud-Native eCommerce App
 
-### Users MicroService
-* Clean architecture
-* Uses Postgres and Dapper
+Distributed microservices lab using ASP.NET Core. Each service follows a different architectural pattern and database engine depending on requirements. I use this project to test different architectures and automate the deployment with Azure DevOps pipelines.
 
-Unit tests and deployment on AKS: https://github.com/jcdotnet/azure-devops-users-microservice
+### Services
+* **Users Service**: Clean Architecture | Postgres + Dapper.
+  * *CI/CD & Infrastructure:* [Azure DevOps Repo](https://github.com/jcdotnet/azure-devops-users-microservice)
+* **Products Service**: N-Tier | MySQL + EF Core.
+  * *CI/CD & Infrastructure:* [Azure DevOps Repo](https://github.com/jcdotnet/azure-devops-products-microservice)
+* **Orders Service**: N-Tier | MongoDB + EF Core.
+  * *CI/CD & Infrastructure:* [Azure DevOps Repo](https://github.com/jcdotnet/azure-devops-orders-microservice)
 
-### Products Microservice
-* N-Tier architecture
-* Uses MySql and EF Core
-
-Unit tests and deployment on AKS: https://github.com/jcdotnet/azure-devops-users-microservice
-
-### Orders Microservice
-* N-Tier architecture
-* Uses Mongo and EF Core
-
-Unit tests and deployment on AKS: https://github.com/jcdotnet/azure-devops-orders-microservice
- 
+### Project Evolution
+I used different branches to show how the app grows from basic containers to a full cloud setup.
+1.  **Communication**: Migration from Synchronous (HTTP) to Asynchronous messaging and API Gateway integration
+2.  **Deployment**: Evolution from local **Docker** to **Kubernetes** and finally **Azure AKS**.
