@@ -1,6 +1,6 @@
 # Cloud-Native eCommerce App
 
-Distributed microservices lab using ASP.NET Core. Each service follows a different architectural pattern and database engine depending on requirements. I use this project to test different architectures and automate the deployment with Azure DevOps pipelines.
+This is my playground for testing microservices architectures and Azure DevOps automation. I use it to see how different patterns and database engines work together within a distributed system."
 
 ### Services
 * **Users Service**: Clean Architecture | Postgres + Dapper.
@@ -10,7 +10,10 @@ Distributed microservices lab using ASP.NET Core. Each service follows a differe
 * **Orders Service**: N-Tier | MongoDB + EF Core.
   * *CI/CD & Infrastructure:* [Azure DevOps Repo](https://github.com/jcdotnet/azure-devops-orders-microservice)
 
-### Project Evolution
-I used different branches to show how the app grows from basic containers to a full cloud setup.
-1.  **Communication**: Migration from Synchronous (HTTP) to Asynchronous messaging and API Gateway integration
-2.  **Deployment**: Evolution from local **Docker** to **Kubernetes** and finally **Azure AKS**.
+### Project 
+This project is structured to show the architectural transition from basic containers to a cloud setup. I've used different **feature branches** to document key milestones:
+
+* **Integration**: Transition from synchronous communication to asynchronous messaging and API Gateway patterns.
+* **Deployment**: Evolution from local Docker environments to Kubernetes and finally AKS.
+
+Note: Some parts of this lab (like auth or security) are simplified for testing purposes and do not follow production standards.
