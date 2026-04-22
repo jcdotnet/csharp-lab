@@ -1,0 +1,21 @@
+﻿<Window x:Class="MessengerServer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Servidor de voz y texto" Height="246" Width="900">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="308*" />
+            <ColumnDefinition Width="518*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85*" />
+            <RowDefinition Height="122*" />
+        </Grid.RowDefinitions>
+        <ListBox Height="158" HorizontalAlignment="Left" Margin="23,37,0,0" Name="listBox1" VerticalAlignment="Top" Width="324" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+        <Label Content="CONEXIONES ENTRANTES:" Height="28" HorizontalAlignment="Left" Margin="22,12,0,0" Name="label1" VerticalAlignment="Top" Width="163" />
+        <ListBox Height="158" HorizontalAlignment="Left" Margin="362,37,0,0" Name="listBox3" VerticalAlignment="Top" Width="171" Grid.RowSpan="2" Grid.Column="1" />
+        <Label Content="USUARIOS CONECTADOS:" Height="28" HorizontalAlignment="Left" Margin="361,12,0,0" Name="label2" VerticalAlignment="Top" Width="157" Grid.Column="1" />
+        <ListBox Height="158" HorizontalAlignment="Left" Margin="33,37,0,0" Name="listBox2" VerticalAlignment="Top" Width="316" Grid.RowSpan="2" Grid.Column="1" />
+        <Label Content="CONEXIONES SALIENTES:" Height="28" HorizontalAlignment="Left" Margin="32,12,0,0" Name="label3" VerticalAlignment="Top" Width="163" Grid.Column="1" />
+    </Grid>
+</Window>

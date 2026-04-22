@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="MenuAcercaDe">Acerca de</system:String>
+    <system:String x:Key="MenuAyuda">Ayuda</system:String>
+    <system:String x:Key="MenuCerrarSesion">Cerrar sesión</system:String>
+    <system:String x:Key="MenuCuenta">Cuenta</system:String>
+    <system:String x:Key="MenuIdioma">Idioma</system:String>
+    <system:String x:Key="MenuInicio">Inicio</system:String>
+    <system:String x:Key="MenuOpciones">Opciones</system:String>
+    <system:String x:Key="MenuPerfil">Perfil</system:String>
+    <system:String x:Key="MenuSalir">Cerrar</system:String>
+    <system:String x:Key="SesionNoIniciada">Messenger (sesión no iniciada)</system:String>
+    <system:String x:Key="LabelIniciarSesion">Inicie sesión</system:String>
+    <system:String x:Key="LabelUsuario">Usuario:</system:String>
+    <system:String x:Key="LabelPassword">Contraseña:</system:String>
+    <system:String x:Key="BotonIniciarSesion">Entrar</system:String>
+    <system:String x:Key="TextBlockCuenta">¿No dispone de una cuenta Messenger?</system:String>
+    <system:String x:Key="TextBlockProblemas">¿Tiene problemas para acceder?</system:String>
+    <system:String x:Key="LinkRegistro">Regístrese</system:String>
+    <system:String x:Key="LinkPassword">Pinche aquí y le eviamos su contraseña</system:String>
+
+</ResourceDictionary>

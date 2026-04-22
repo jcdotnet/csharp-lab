@@ -1,0 +1,35 @@
+﻿<Window x:Class="MessengerWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="prueba CHAT" Height="320" Width="300" Closing="Window_Closing" StateChanged="Window_StateChanged">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Menu Grid.Row="0">
+            <MenuItem Header="{DynamicResource MenuCuenta}">
+                <MenuItem Name="menuPerfil" Header="{DynamicResource MenuPerfil}"/>
+                <Separator></Separator>
+                <MenuItem Name="menuSalir" Header="{DynamicResource MenuCerrarSesion}" Click="menuSalir_Click" />
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuOpciones}"/>
+        </Menu>
+        
+        <StackPanel Grid.Row="1">
+        <Label Content="USUARIOS ONLINE" HorizontalAlignment="Left" Name="label1" />
+        <ListView Name="listView" ItemsSource="{Binding Path=ContactList}" MouseDoubleClick="listView_MouseDoubleClick" BorderThickness="0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Image}" Width="8"/>
+                        <Label Content="{Binding UserName}"/> <!-- TextBlock Text-->
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+                                 
+        </ListView>
+        </StackPanel>
+    </Grid>
+</Window>

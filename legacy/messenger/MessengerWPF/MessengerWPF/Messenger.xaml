@@ -1,0 +1,50 @@
+﻿<Window x:Class="MessengerWPF.Messenger"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Messenger" Height="480" Width="640" ResizeMode="NoResize" Icon="/MessengerWPF;component/Images/logo32.ico" Closed="Window_Closed"> 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/> <!--contenedor con menú y logo por ejemplo-->
+            <RowDefinition Height="250"/>
+            <RowDefinition/> <!-- pie u opción adicional -->
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+        <Menu Height="25">
+            <MenuItem Header="{DynamicResource MenuInicio}">
+                    <MenuItem Name="menuSalir" Header="{DynamicResource MenuSalir}" Click="menuSalir_Click" />
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuOpciones}">
+               <MenuItem Header="{DynamicResource MenuIdioma}" >
+                    <MenuItem Name="menuEnglish" Header="English" Click="menuEnglish_Click"/>
+                    <MenuItem Name="menuEspañol" Header="Español" Click="menuEspañol_Click"/>
+                </MenuItem>                                                       
+            </MenuItem>
+                <MenuItem Header="{DynamicResource MenuAyuda}">
+                    <MenuItem Header="{DynamicResource MenuAcercaDe}" />
+            </MenuItem>
+        </Menu>
+        <Image Height="100" Margin="0,12,0,0" Stretch="Fill" Width="100" Source="/MessengerWPF;component/Images/logo.png" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+            <Label Name="lbLogin" Content="{DynamicResource LabelIniciarSesion}" HorizontalContentAlignment="Center" FontSize="14" FontFamily="Segoe UI"></Label>
+            <Label Name="lbUsuario" Content="{DynamicResource LabelUsuario}" Height="Auto"></Label>
+            <TextBox Name="tbUsuario" />
+            <Label Name="lbPassword" Content="{DynamicResource LabelPassword}"></Label>
+            <PasswordBox Name="tbPassword" />
+            <Button Name="btEntrar" Content="{DynamicResource BotonIniciarSesion}" HorizontalAlignment="Center" Width="100" Margin="0,10,0,20" Click="btEntrar_Click" />
+        <TextBlock>
+           <Run Text="{DynamicResource TextBlockCuenta}"/> 
+           <Hyperlink Name="linkRegistro" NavigateUri="Registro.xaml"
+                RequestNavigate="linkRegistro_RequestNavigate">
+               <TextBlock Text="{DynamicResource LinkRegistro}"/>
+           </Hyperlink>           
+           <LineBreak/><LineBreak/>
+           <Run Text="{DynamicResource TextBlockProblemas}"/><LineBreak/>
+           <Hyperlink Name="linkPassword" NavigateUri="Registro.xaml"
+                RequestNavigate="linkPassWord_RequestNavigate">
+              <TextBlock Text="{DynamicResource LinkPassword}"/>
+           </Hyperlink> 
+        </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

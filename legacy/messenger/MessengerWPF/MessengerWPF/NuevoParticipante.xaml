@@ -1,0 +1,17 @@
+﻿<Window x:Class="MessengerWPF.NuevoParticipante"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NuevoParticipante" Height="300" Width="300">
+    <Grid>
+        <StackPanel>
+        <ListBox Name="lbParticipantes" ItemsSource="{Binding Path=Disponibles}" Height="115">
+                <!--<ListBox.ItemTemplate>
+                <DataTemplate>
+                        <CheckBox Name ="cbUsuario" Checked="cbUsuario_Checked" />
+                    </DataTemplate>
+            </ListBox.ItemTemplate>-->
+        </ListBox>
+        <Button Content="Agregar" Height="23" Name="btAgregar" Width="75" Click="btAgregar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
