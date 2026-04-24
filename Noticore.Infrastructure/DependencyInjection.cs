@@ -11,28 +11,31 @@ namespace Noticore.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, 
-            IConfiguration configuration, IHostEnvironment environment)
+        extension(IServiceCollection services) 
         {
-            // Database Configuration
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-            // Repositories
-            services.AddScoped<INotificationRepository, NotificationRepository>();
-
-            // Email Service
-            if (environment.IsDevelopment())
+            public IServiceCollection AddInfrastructure(IConfiguration configuration, 
+                IHostEnvironment environment)
             {
-                services.AddTransient<IEmailService, FakeEmailService>();
+                // Database Configuration
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlite(configuration.GetConnectionString("DefaultConnection"),
+                        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+                // Repositories
+                services.AddScoped<INotificationRepository, NotificationRepository>();
+
+                // Email Service
+                if (environment.IsDevelopment())
+                {
+                    services.AddTransient<IEmailService, FakeEmailService>();
+                }
+                else
+                {
+                    services.AddTransient<IEmailService, SmtpEmailService>();
+                }
+
+                return services;
             }
-            else
-            {
-                services.AddTransient<IEmailService, SmtpEmailService>();
-            }
-            
-            return services;
         }
     }
 }
