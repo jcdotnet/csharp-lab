@@ -1,14 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace CitiesManager.Core.Entities;
 
-namespace CitiesManager.Core.Entities
+// Entity model for City -  Clean POCO architecture
+public class City
 {
-    // Entity model for City
-    public class City
-    {
-        [Key]
-        public Guid Id { get; set; }
+    //[Key] // DB configuration moved to FluentAPI (SRP)
+    public Guid Id { get; set; }
 
-        [Required]
-        public string? Name { get; set; }
-    }
+    //[Required] // DB configuration moved to FluentAPI (SRP)
+    public string Name { get; set; } = String.Empty;
+
+    // Foreign Key for Country (Many-to-One relationship)
+    public Guid CountryId { get; set; }
+    public virtual Country? Country { get; set; }
+
+    // Shared Primary Key (One-to-One relationship)
+    public virtual CityDetail? Detail { get; set; }
+
+    // One-to-Many relationship
+    public virtual ICollection<Citizen> Citizens { get; set; } = [];
 }
