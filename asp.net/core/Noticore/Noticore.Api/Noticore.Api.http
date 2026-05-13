@@ -1,0 +1,22 @@
+@Noticore.Api_HostAddress = http://localhost:5020
+
+### Create a new notification
+# 0 = Email, 1 = Sms, 2 = Push
+POST {{Noticore.Api_HostAddress}}/api/notifications
+Content-Type: application/json
+
+{
+  "title": "Welcome to Noticore",
+  "message": "This is our first notification test",
+  "recipient": "jc@example.com",
+  "type": 0
+}
+
+### Get all notifications
+GET {{Noticore.Api_HostAddress}}/api/notifications
+
+### Get a specific notification
+@notificationId = d967ca67-eeb7-451b-8565-c50a51e836bc
+GET {{Noticore.Api_HostAddress}}/api/notifications/{{notificationId}}
+
+###
