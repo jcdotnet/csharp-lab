@@ -1,6 +1,6 @@
 # Cloud-Native eCommerce App
 
-This is my playground for testing microservices architectures and Azure DevOps automation. I use it to see how different patterns and database engines work together within a distributed system."
+This project was built as part of the Udemy course **[.NET Microservices with Azure DevOps & AKS](https://www.udemy.com/course/dot-net-microservices-ecommerce-project-azure-devops-kubernetes-aks/)** to experiment with microservices architectures and Azure DevOps automation. I used to see how different patterns and database engines work together within a distributed system.
 
 ### Services
 * **Users Service**: Clean Architecture | Postgres + Dapper.
@@ -15,5 +15,3 @@ This project is structured to show the architectural transition from basic conta
 
 * **Integration**: Transition from synchronous communication to asynchronous messaging and API Gateway patterns.
 * **Deployment**: Evolution from local Docker environments to Kubernetes and finally AKS.
-
-Note: Some parts of this lab (like auth or security) are simplified for testing purposes and do not follow production standards.
