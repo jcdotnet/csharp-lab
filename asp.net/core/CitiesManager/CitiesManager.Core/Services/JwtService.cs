@@ -23,7 +23,7 @@ namespace CitiesManager.Core.Services
         {
             // token expiration time
             DateTime expiration = DateTime.UtcNow.AddMinutes(
-                Convert.ToDouble(_configuration["Jwt:expiration_minutes"]));
+                Convert.ToDouble(_configuration["Jwt:ExpirationMinutes"]));
 
             // payload // user's claims
             Claim[] claims = [
@@ -31,9 +31,9 @@ namespace CitiesManager.Core.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // JWT ID
                 new Claim(type: JwtRegisteredClaimNames.Iat, 
                     value: DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()), // Issued at
-                new Claim(type: ClaimTypes.NameIdentifier, value: user.Email),
-                new Claim(type: ClaimTypes.Name, value: user.Name),
-                new Claim(type: ClaimTypes.Email, value: user.Email),
+                new Claim(type: ClaimTypes.NameIdentifier, value: user.Id.ToString()),
+                new Claim(type: ClaimTypes.Name, value: user.Name ?? "Unknown"),
+                new Claim(type: ClaimTypes.Email, value: user.Email ?? string.Empty),
             ];
 
             // secret key
@@ -66,8 +66,8 @@ namespace CitiesManager.Core.Services
                 Name = user.Name,
                 Expiration = expiration,
                 RefreshToken = GenerateRefreshToken(),
-                RefreshTokenExpiration = DateTime.Now.AddMinutes(
-                    Convert.ToInt32(_configuration["RefreshToken:expiration_minutes"])
+                RefreshTokenExpiration = DateTime.UtcNow.AddMinutes(
+                    Convert.ToInt32(_configuration["RefreshToken:ExpirationMinutes"])
                 )
             };
         }
@@ -90,7 +90,7 @@ namespace CitiesManager.Core.Services
                 ValidIssuer = _configuration["Jwt:Issuer"],
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!)
+                    Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
                 ),
                 ValidateLifetime = false, // token can be expired
             };
