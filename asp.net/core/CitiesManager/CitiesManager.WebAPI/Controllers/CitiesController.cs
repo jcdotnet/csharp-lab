@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using CitiesManager.Core.DTO;
 using CitiesManager.Core.Entities;
 using CitiesManager.Infrastructure.DatabaseContext;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CitiesManager.WebAPI.Controllers;
 
@@ -33,9 +35,12 @@ public class CitiesController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<City>>> GetCities()
+    public async Task<ActionResult<IEnumerable<CityResponse>>> GetCities()
     {
-        return await _context.Cities.ToListAsync();
+        return await _context.Cities
+        .AsNoTracking()
+        .Select(c => new CityResponse(c.Id, c.Name, c.CountryId, null, null))
+        .ToListAsync();
     }
 
     // GET: api/Cities/5
@@ -45,31 +50,34 @@ public class CitiesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<City>> GetCity(Guid id)
+    public async Task<ActionResult<CityResponse>> GetCity(Guid id)
     {
-        var city = await _context.Cities.FindAsync(id);
+        var cityResponse = await _context.Cities
+            .AsNoTracking()
+            .Where(c => c.Id == id)
+            .Select(c => new CityResponse(c.Id, c.Name, c.CountryId, null, null))
+            .FirstOrDefaultAsync();
 
-        if (city == null)
+        if (cityResponse == null)
         {
             //return NotFound();
             return Problem(detail: "Invalid City Id", statusCode: 400, title: "Get City");
         }
 
-        return city;
+        return cityResponse;
     }
 
     // PUT: api/Cities/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     /// <summary>
     /// Updates a city in the database
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="city"></param>
+    /// <param name="cityUpdateRequest"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutCity(Guid id, City city)
+    public async Task<IActionResult> PutCity(Guid id, CityUpdateRequest cityUpdateRequest)
     {
-        if (id != city.Id)
+        if (id != cityUpdateRequest.CityId)
         {
             return BadRequest();
         }
@@ -77,8 +85,10 @@ public class CitiesController : ControllerBase
         //_context.Entry(city).State = EntityState.Modified;
         var tempCity = await _context.Cities.FindAsync(id);
         if (tempCity == null) return NotFound();
-        tempCity.Name = city.Name;
         
+        tempCity.Name = cityUpdateRequest.CityName;
+        tempCity.CountryId = cityUpdateRequest.CountryId;
+
         try
         {
             await _context.SaveChangesAsync();
@@ -103,18 +113,21 @@ public class CitiesController : ControllerBase
     /// <summary>
     /// Creates a city in the database
     /// </summary>
-    /// <param name="city"></param>
+    /// <param name="cityAddRequest"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<City>> PostCity(City city)
+    public async Task<ActionResult<CityResponse>> PostCity([FromBody]CityAddRequest cityAddRequest)
     {
-        if (_context.Cities == null)
+        var city = new City
         {
-            //return BadRequest();
-            return Problem("Entity set 'ApplicationDbContext.Cities' is null.");
-        }
+            Name = cityAddRequest.CityName.Trim(),
+            CountryId = cityAddRequest.CountryId
+        };
+
         _context.Cities.Add(city);
         await _context.SaveChangesAsync();
+
+        var response = new CityResponse(city.Id, city.Name, city.CountryId, null, null);
 
         return CreatedAtAction("GetCity", new { id = city.Id }, city);
     }

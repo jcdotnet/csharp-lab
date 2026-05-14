@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 
 namespace CitiesManager.Core.Services;
 public class JwtService : IJwtService
@@ -58,17 +59,15 @@ public class JwtService : IJwtService
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         string token = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
 
-        return new AuthenticationResponse()
-        {
-            Token = token,
-            Email = user.Email,
-            Name = user.Name,
-            Expiration = expiration,
-            RefreshToken = GenerateRefreshToken(),
-            RefreshTokenExpiration = DateTime.UtcNow.AddMinutes(
-                Convert.ToInt32(_configuration["RefreshToken:ExpirationMinutes"])
-            )
-        };
+        return new AuthenticationResponse
+        (
+            user.Name ?? string.Empty,
+            user.Email ?? string.Empty,
+            token,
+            GenerateRefreshToken(),
+            expiration,
+            DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:ExpirationMinutes"]))
+        );
     }
 
     private static string GenerateRefreshToken()

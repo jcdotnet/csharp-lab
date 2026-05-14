@@ -76,19 +76,19 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.PutCity(System.Guid,CitiesManager.Core.Entities.City)">
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.PutCity(System.Guid,CitiesManager.Core.DTO.CityUpdateRequest)">
             <summary>
             Updates a city in the database
             </summary>
             <param name="id"></param>
-            <param name="city"></param>
+            <param name="cityUpdateRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.PostCity(CitiesManager.Core.Entities.City)">
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.PostCity(CitiesManager.Core.DTO.CityAddRequest)">
             <summary>
             Creates a city in the database
             </summary>
-            <param name="city"></param>
+            <param name="cityAddRequest"></param>
             <returns></returns>
         </member>
         <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.DeleteCity(System.Guid)">
