@@ -21,26 +21,28 @@ public record LoginDto(
     string Password
 );
 
-public record RegisterDto(
+public class RegisterDto
+{
     [Required]
-    string Name,
+    public string Name { get; set; } = string.Empty;
 
     [Required]
     [EmailAddress]
-    [property: Remote(action: "ValidateEmail", controller: "Account", ErrorMessage = "Email exists")] 
-    string Email,
+    [Remote(action: "ValidateEmail", controller: "Account", ErrorMessage = "Email exists")]
+    public string Email { get; set; } = string.Empty;
 
     [Required]
     [RegularExpression("^[0-9]{3,12}$", ErrorMessage = "Phone number must contain 3-12 digits")]
-    string PhoneNumber,
+    public string PhoneNumber { get; set; } = string.Empty;
 
     [Required]
-    string Password,
+    public string Password { get; set; } = string.Empty;
 
     [Required]
-    [property: Compare("Password", ErrorMessage = "Passwords don't match")]
-    string ConfirmPassword
-);
+    [Compare("Password", ErrorMessage = "Passwords don't match")]
+    public string ConfirmPassword { get; set; } = string.Empty;
+}
+
 public record TokenDto(
     string? Token,
     string? RefreshToken

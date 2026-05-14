@@ -1,0 +1,19 @@
+services:
+  cities-db:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: cities-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Cities123!!!
+    ports:
+      - "1433:1433"
+
+  cities-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cities-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - cities-db
