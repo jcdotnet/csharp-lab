@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CitiesManager.Core.Identity
+namespace CitiesManager.Core.Identity;
+public class ApplicationRole : IdentityRole<Guid>
 {
-    public class ApplicationRole : IdentityRole<Guid>
-    {
-    }
 }

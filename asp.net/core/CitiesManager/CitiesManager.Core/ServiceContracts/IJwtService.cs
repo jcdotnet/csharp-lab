@@ -2,12 +2,10 @@
 using CitiesManager.Core.Identity;
 using System.Security.Claims;
 
-namespace CitiesManager.Core.ServiceContracts
+namespace CitiesManager.Core.ServiceContracts;
+public interface IJwtService
 {
-    public interface IJwtService
-    {
-        AuthenticationResponse CreateJwtToken(ApplicationUser user);
+    AuthenticationResponse CreateJwtToken(ApplicationUser user);
 
-        ClaimsPrincipal? GetPrincipalFromJwtToken(string? token);
-    }
+    ClaimsPrincipal? GetPrincipalFromJwtToken(string? token);
 }

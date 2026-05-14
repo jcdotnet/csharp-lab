@@ -1,18 +1,15 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿namespace CitiesManager.Core.DTO;
 
-namespace CitiesManager.Core.DTO
+public class AuthenticationResponse
 {
-    public class AuthenticationResponse
-    {
-        public string? Name { get; set; } = string.Empty;
+    public string? Name { get; set; } = string.Empty;
 
-        public string? Email { get; set; } = string.Empty;
+    public string? Email { get; set; } = string.Empty;
 
-        public string? Token { get; set; } = string.Empty;
+    public string? Token { get; set; } = string.Empty;
 
-        public string? RefreshToken { get; set; } = string.Empty; 
+    public string? RefreshToken { get; set; } = string.Empty; 
 
-        public DateTime Expiration {  get; set; }
-        public DateTime RefreshTokenExpiration { get; set; }
-    }
+    public DateTime Expiration {  get; set; }
+    public DateTime RefreshTokenExpiration { get; set; }
 }

@@ -1,8 +1,6 @@
-﻿namespace CitiesManager.Core.DTO
+﻿namespace CitiesManager.Core.DTO;
+public class TokenDto
 {
-    public class TokenDto
-    {
-        public string? Token { get; set; }
-        public string? RefreshToken { get; set; }
-    }
+    public string? Token { get; set; }
+    public string? RefreshToken { get; set; }
 }

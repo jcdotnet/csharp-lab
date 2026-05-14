@@ -1,23 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CitiesManager.WebAPI.Controllers
+namespace CitiesManager.WebAPI.Controllers;
+
+/// <summary>
+/// 
+/// </summary>
+[Route("api/[controller]")]
+[ApiController]
+public class DemoController : ControllerBase
 {
     /// <summary>
     /// 
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DemoController : ControllerBase
+    /// <returns></returns>
+    [HttpGet]
+    public string GetActionMethod()
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public string GetActionMethod()
-        {
-            return "Hello, World!";
-        }
+        return "Hello, World!";
     }
 }
