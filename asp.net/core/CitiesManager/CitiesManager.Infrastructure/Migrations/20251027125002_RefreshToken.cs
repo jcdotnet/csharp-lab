@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CitiesManager.Infrasctructure.Migrations
+namespace CitiesManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class RefreshToken : Migration

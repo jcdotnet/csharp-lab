@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CitiesManager.Infrasctructure.Migrations
+namespace CitiesManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class RefreshTokenExpiration : Migration

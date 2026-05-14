@@ -98,17 +98,6 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="T:CitiesManager.WebAPI.Controllers.DemoController">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:CitiesManager.WebAPI.Controllers.DemoController.GetActionMethod">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Program">
             <summary>
             Auto-generated public partial Program class for top-level statement apps.

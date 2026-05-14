@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11806.211 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesManager.WebAPI", "CitiesManager.WebAPI\CitiesManager.WebAPI.csproj", "{19DE9DAE-EA45-4AC3-91AC-7804BE51FF0D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesManager.Core", "CitiesManager.Core\CitiesManager.Core.csproj", "{666FDDE0-EB5D-4CAC-85F5-20BE6D801EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesManager.Infrasctructure", "CitiesManager.Infrasctructure\CitiesManager.Infrasctructure.csproj", "{6239D0DA-2D14-47DD-AFF4-2E0C1C518A07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesManager.Infrastructure", "CitiesManager.Infrastructure\CitiesManager.Infrastructure.csproj", "{6239D0DA-2D14-47DD-AFF4-2E0C1C518A07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
