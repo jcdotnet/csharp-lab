@@ -98,6 +98,46 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.GetCitizens(System.Guid)">
+            <summary>
+            Gets a list of citizens who lives in a specific city
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.GetCitizen(System.Guid,System.Guid)">
+            <summary>
+            Gets a specific citizen from a specific city
+            </summary>
+            <param name="id"></param>
+            <param name="citizenId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.PostCitizen(System.Guid,CitiesManager.Core.DTO.CitizenAddRequest)">
+            <summary>
+            Creates a new citizen inside a specific city
+            </summary>
+            <param name="id"></param>
+            <param name="citizenAddRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.PutCitizen(System.Guid,System.Guid,CitiesManager.Core.DTO.CitizenUpdateRequest)">
+            <summary>
+            Updates a citizen
+            </summary>
+            <param name="id"></param>
+            <param name="citizenId"></param>
+            <param name="citizenUpdateRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.DeleteCitizen(System.Guid,System.Guid)">
+            <summary>
+            Deletes a citizen from a specific city
+            </summary>
+            <param name="id"></param>
+            <param name="citizenId"></param>
+            <returns></returns>
+        </member>
         <member name="T:Program">
             <summary>
             Auto-generated public partial Program class for top-level statement apps.
