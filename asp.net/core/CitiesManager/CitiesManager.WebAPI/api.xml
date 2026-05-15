@@ -177,6 +177,27 @@
             <param name="id"> The country Id</param>
             <returns></returns>
         </member>
+        <member name="T:CitiesManager.WebAPI.Infrastructure.GlobalExceptionHandler">
+            <summary>
+            GlobalExceptionHandler
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Infrastructure.GlobalExceptionHandler.#ctor(Microsoft.Extensions.Logging.ILogger{CitiesManager.WebAPI.Infrastructure.GlobalExceptionHandler})">
+            <summary>
+            GlobalExceptionHandler
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Infrastructure.GlobalExceptionHandler.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+            <summary>
+            ValueTask
+            </summary>
+            <param name="httpContext"></param>
+            <param name="exception"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:Program">
             <summary>
             Auto-generated public partial Program class for top-level statement apps.

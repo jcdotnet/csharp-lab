@@ -2,6 +2,7 @@ using CitiesManager.Core.Identity;
 using CitiesManager.Core.ServiceContracts;
 using CitiesManager.Core.Services;
 using CitiesManager.Infrastructure.DatabaseContext;
+using CitiesManager.WebAPI.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -14,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the IoC container.
 builder.Services.AddTransient<IJwtService, JwtService>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers(options =>
 {
@@ -110,6 +114,7 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseExceptionHandler();
 
 //app.UseHsts();
 app.UseHttpsRedirection();
