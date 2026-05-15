@@ -4,6 +4,7 @@ using CitiesManager.Infrastructure.DatabaseContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace CitiesManager.WebAPI.Controllers;
 
@@ -94,7 +95,7 @@ public class CitiesController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!CityExists(id))
+            if (!await CityExists(id))
             {
                 return NotFound();
             }
@@ -117,9 +118,17 @@ public class CitiesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CityResponse>> PostCity([FromBody] CityAddRequest cityAddRequest)
     {
+        string cityName = RemoveAccents(cityAddRequest.CityName);
+
+        bool cityExists = await _context.Cities.AnyAsync(c =>
+            c.Name == cityName && c.CountryId == cityAddRequest.CountryId
+        );
+
+        if (cityExists) return Problem(detail: "City Exists", statusCode: 409, title: "Post City");
+
         var city = new City
         {
-            Name = cityAddRequest.CityName.Trim(),
+            Name = cityName,
             CountryId = cityAddRequest.CountryId
         };
 
@@ -163,7 +172,7 @@ public class CitiesController : ControllerBase
     [HttpGet("{id}/Citizens")]
     public async Task<ActionResult<IEnumerable<CitizenResponse>>> GetCitizens(Guid id)
     {
-        if (!CityExists(id))
+        if (!await CityExists(id))
         {
             return Problem(detail: "City Not Found", statusCode: 404, title: "Get City Citizens");
         }
@@ -226,14 +235,22 @@ public class CitiesController : ControllerBase
         [FromBody] CitizenAddRequest citizenAddRequest)
     {
 
-        if (!CityExists(id))
+        if (!await CityExists(id))
         {
             return Problem(detail: "City Not Found", statusCode: 404, title: "Register Citizen");
         }
 
+        string citizenName = RemoveAccents(citizenAddRequest.FullName);
+
+        bool citizenExists = await _context.Citizens.AnyAsync(c =>
+            c.FullName.ToLower() == citizenName.ToLower() && c.CityId == id
+        );
+
+        if (citizenExists) return Problem(detail: "Citizen Exists", statusCode: 409, title: "Register Citizen");
+
         var citizen = new Citizen
         {
-            FullName = citizenAddRequest.FullName.Trim(),
+            FullName = citizenName,
             DateOfBirth = citizenAddRequest.DateOfBirth,
             Address = citizenAddRequest.Address.Trim(),
             CityId = id
@@ -276,7 +293,7 @@ public class CitiesController : ControllerBase
             return Problem(detail: "Citizen Not Found", statusCode: 404, title: "Update Citizen");
         }
 
-        if (tempCitizen.CityId != citizenUpdateRequest.CityId && !CityExists(citizenUpdateRequest.CityId))
+        if (tempCitizen.CityId != citizenUpdateRequest.CityId && !await CityExists(citizenUpdateRequest.CityId))
         {
             return Problem(detail: "City Not Found", statusCode: 404, title: "Update Citizen");
         }
@@ -330,9 +347,28 @@ public class CitiesController : ControllerBase
 
     #region private methods
 
-    private bool CityExists(Guid id)
+    private async Task<bool> CityExists(Guid id)
     {
-        return _context.Cities.Any(e => e.Id == id);
+        return await _context.Cities.AnyAsync(e => e.Id == id);
+    }
+
+    private string RemoveAccents(string text)
+    {
+        var replacements = new Dictionary<char, char>
+        {
+            { 'á', 'a' }, { 'é', 'e' }, { 'í', 'i' }, { 'ó', 'o' }, { 'ú', 'u' },
+            { 'Á', 'a' }, { 'É', 'e' }, { 'Í', 'i' }, { 'Ó', 'o' }, { 'Ú', 'u' },
+            { 'ü', 'u' }, { 'Ü', 'u' }
+        };
+
+        StringBuilder sb = new StringBuilder();
+
+        foreach (char c in text)
+        {
+            sb.Append(replacements.ContainsKey(c) ? replacements[c] : c);
+        }
+
+        return sb.ToString().ToLower().Trim();
     }
 
     #endregion
