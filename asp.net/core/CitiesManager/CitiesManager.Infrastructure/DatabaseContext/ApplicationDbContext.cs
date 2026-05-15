@@ -34,13 +34,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         {
             entity.ToTable("Countries"); // optional but recommended
             entity.HasKey(c => c.Id);
-            entity.Property(c => c.Name).IsRequired().HasMaxLength(100);
+            entity.Property(c => c.Name).IsRequired().HasMaxLength(100).UseCollation("Latin1_General_100_CI_AI");
         });
         modelBuilder.Entity<City>(entity =>
         {
             entity.ToTable("Cities");
             entity.HasKey(c => c.Id);
-            entity.Property(c => c.Name).IsRequired().HasMaxLength(100);
+            entity.Property(c => c.Name).IsRequired().HasMaxLength(100).UseCollation("Latin1_General_100_CI_AI");
 
             entity.HasOne(c => c.Country)
                   .WithMany(co => co.Cities)
@@ -53,7 +53,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
             entity.HasKey(cd => cd.CityId); // both the Primary Key and the Foreign Key (Strict 1-to-1)
 
-            entity.Property(cd => cd.MayorName).IsRequired().HasMaxLength(150);
+            entity.Property(cd => cd.MayorName).IsRequired().HasMaxLength(150)
+                  .UseCollation("Latin1_General_100_CI_AI"); ;
             
             entity.HasOne(cd => cd.City)
                   .WithOne(c => c.Detail)
@@ -65,7 +66,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             entity.ToTable("Citizens");
             entity.HasKey(cz => cz.Id);
 
-            entity.Property(cz => cz.FullName).IsRequired().HasMaxLength(150);
+            entity.Property(cz => cz.FullName).IsRequired().HasMaxLength(150)
+                  .UseCollation("Latin1_General_100_CI_AI");
             entity.Property(cz => cz.Address).IsRequired().HasMaxLength(250);
             entity.Property(cz => cz.DateOfBirth).IsRequired();
 

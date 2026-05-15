@@ -72,7 +72,7 @@ namespace CitiesManager.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CountryResponse>> PostCountry([FromBody] CountryAddRequest countryAddRequest)
         {
-            string countryName = RemoveAccents(countryAddRequest.CountryName);
+            string countryName = countryAddRequest.CountryName.Trim();
 
             bool countryExists = await context.Countries.AnyAsync(c => c.Name == countryName);
 
@@ -84,7 +84,7 @@ namespace CitiesManager.WebAPI.Controllers
             var country = new Country
             {
                 Id = Guid.NewGuid(),
-                Name = countryName // saving the normalized version (without accents) for this lab
+                Name = countryName
             };
 
             context.Countries.Add(country);
@@ -115,29 +115,6 @@ namespace CitiesManager.WebAPI.Controllers
                 .Select(c => new CityResponse(c.Id, c.Name, c.CountryId, null, null))
                 .ToListAsync();
         }
-
-        #region #private 
-
-        private string RemoveAccents(string text)
-        {
-            var replacements = new Dictionary<char, char>
-            {
-                { 'á', 'a' }, { 'é', 'e' }, { 'í', 'i' }, { 'ó', 'o' }, { 'ú', 'u' },
-                { 'Á', 'a' }, { 'É', 'e' }, { 'Í', 'i' }, { 'Ó', 'o' }, { 'Ú', 'u' },
-                { 'ü', 'u' }, { 'Ü', 'u' }
-            };
-
-            var sb = new StringBuilder();
-
-            foreach (char c in text)
-            {
-                sb.Append(replacements.ContainsKey(c) ? replacements[c] : c);
-            }
-
-            return sb.ToString().ToLower().Trim();
-        }
-
-        #endregion
 
     }
 }

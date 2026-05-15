@@ -118,7 +118,7 @@ public class CitiesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CityResponse>> PostCity([FromBody] CityAddRequest cityAddRequest)
     {
-        string cityName = RemoveAccents(cityAddRequest.CityName);
+        string cityName = cityAddRequest.CityName.Trim();
 
         bool cityExists = await _context.Cities.AnyAsync(c =>
             c.Name == cityName && c.CountryId == cityAddRequest.CountryId
@@ -241,10 +241,10 @@ public class CitiesController : ControllerBase
             return Problem(detail: "City Not Found", statusCode: 404, title: "Register Citizen");
         }
 
-        string citizenName = RemoveAccents(citizenAddRequest.FullName);
+        string citizenName = citizenAddRequest.FullName.Trim();
 
         bool citizenExists = await _context.Citizens.AnyAsync(c =>
-            c.FullName.ToLower() == citizenName.ToLower() && c.CityId == id
+            c.FullName == citizenName && c.CityId == id
         );
 
         if (citizenExists) return Problem(detail: "Citizen Exists", statusCode: 409, title: "Register Citizen");
@@ -351,25 +351,6 @@ public class CitiesController : ControllerBase
     private async Task<bool> CityExists(Guid id)
     {
         return await _context.Cities.AnyAsync(e => e.Id == id);
-    }
-
-    private string RemoveAccents(string text)
-    {
-        var replacements = new Dictionary<char, char>
-        {
-            { 'á', 'a' }, { 'é', 'e' }, { 'í', 'i' }, { 'ó', 'o' }, { 'ú', 'u' },
-            { 'Á', 'a' }, { 'É', 'e' }, { 'Í', 'i' }, { 'Ó', 'o' }, { 'Ú', 'u' },
-            { 'ü', 'u' }, { 'Ü', 'u' }
-        };
-
-        StringBuilder sb = new StringBuilder();
-
-        foreach (char c in text)
-        {
-            sb.Append(replacements.ContainsKey(c) ? replacements[c] : c);
-        }
-
-        return sb.ToString().ToLower().Trim();
     }
 
     #endregion

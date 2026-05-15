@@ -7,7 +7,7 @@ public class City
     public Guid Id { get; set; }
 
     //[Required] // DB configuration moved to FluentAPI (SRP)
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = string.Empty;
 
     // Foreign Key for Country (Many-to-One relationship)
     public Guid CountryId { get; set; }
