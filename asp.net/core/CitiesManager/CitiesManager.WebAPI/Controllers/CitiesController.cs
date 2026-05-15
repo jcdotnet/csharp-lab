@@ -9,7 +9,7 @@ using System.Text;
 namespace CitiesManager.WebAPI.Controllers;
 
 /// <summary>
-///  Represents the Cities Manager API controller class
+///  Represents the Cities Manager API controller class for cities
 /// </summary>
 [Authorize]
 [Route("api/[controller]")]
@@ -163,6 +163,7 @@ public class CitiesController : ControllerBase
 
     #region Citizens
 
+    // REST routes: citizens routes go here because citizen are dependent on city
     // GET: api/Cities/5/Citizens
     /// <summary>
     /// Gets a list of citizens who lives in a specific city

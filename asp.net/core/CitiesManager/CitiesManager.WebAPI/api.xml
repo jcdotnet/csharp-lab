@@ -54,7 +54,7 @@
         </member>
         <member name="T:CitiesManager.WebAPI.Controllers.CitiesController">
             <summary>
-             Represents the Cities Manager API controller class
+             Represents the Cities Manager API controller class for cities
             </summary>
         </member>
         <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.#ctor(CitiesManager.Infrastructure.DatabaseContext.ApplicationDbContext)">
@@ -136,6 +136,45 @@
             </summary>
             <param name="id"></param>
             <param name="citizenId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CitiesManager.WebAPI.Controllers.CountriesController">
+            <summary>
+            Represents the Cities Manager API controller class for countries
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CountriesController.#ctor(CitiesManager.Infrastructure.DatabaseContext.ApplicationDbContext)">
+            <summary>
+            Represents the Cities Manager API controller class for countries
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CountriesController.GetCountries">
+            <summary>
+            Get Countries
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CountriesController.GetCountry(System.Guid)">
+            <summary>
+            Get country
+            </summary>
+            <param name="id">Country Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CountriesController.PostCountry(CitiesManager.Core.DTO.CountryAddRequest)">
+            <summary>
+            Creates a new country
+            </summary>
+            <param name="countryAddRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.CountriesController.GetCitiesByCountry(System.Guid)">
+            <summary>
+            Get all cities from a specific country 
+            </summary>
+            <param name="id"> The country Id</param>
             <returns></returns>
         </member>
         <member name="T:Program">
