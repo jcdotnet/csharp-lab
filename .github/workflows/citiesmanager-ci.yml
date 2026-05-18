@@ -42,8 +42,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    - name: Wait for database container
-      run: sleep 10
+    - name: Create Database
+      run: |
+        dotnet tool install --global dotnet-ef
+        dotnet ef database update --project CitiesManager.Infrastructure/CitiesManager.Infrastructure.csproj --startup-project CitiesManager.WebAPI/CitiesManager.WebAPI.csproj --configuration Release
 
     - name: Run integration tests
       run: dotnet test --no-build --configuration Release

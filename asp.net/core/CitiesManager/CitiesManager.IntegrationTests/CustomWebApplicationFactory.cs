@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CitiesManager.IntegrationTests;
@@ -27,12 +26,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 options.UseSqlServer("Data Source=localhost,1433;Initial Catalog=CitiesDatabase;User Id=sa;Password=Cities123!!!;TrustServerCertificate=True;");
             });
-
-            // Testing against the local Docker database container
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //{
-            //    options.UseInMemoryDatabase("InMemoryDatabaseForTesting");
-            //});
 
             services.AddAuthentication(options =>
             {
