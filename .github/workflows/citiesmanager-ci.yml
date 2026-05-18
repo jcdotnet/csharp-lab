@@ -1,0 +1,49 @@
+name: CitiesManager CI
+
+on:
+  push:
+    branches: [ main, dev ]
+    paths:
+      - 'asp.net/core/CitiesManager/**'
+  pull_request:
+    branches: [ main, dev ]
+    paths:
+      - 'asp.net/core/CitiesManager/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: asp.net/core/CitiesManager
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2025-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "Cities123!!!"
+        ports:
+          - 1433:1433
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore NuGet packages
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Wait for database container
+      run: sleep 10
+
+    - name: Run integration tests
+      run: dotnet test --no-build --configuration Release
