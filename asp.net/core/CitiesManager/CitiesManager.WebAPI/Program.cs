@@ -35,7 +35,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, "api.xml");
+    // Prevent HTTP 500 in integration tests by ebsuring that the file exists
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
 
     // Security schema for Swagger UI (authorize button)
     var securityScheme = new OpenApiSecurityScheme
@@ -130,3 +135,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+/// <summary>
+/// Integration tests
+/// </summary>
+public partial class Program { }

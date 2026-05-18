@@ -137,7 +137,7 @@ public class CitiesController : ControllerBase
 
         var response = new CityResponse(city.Id, city.Name, city.CountryId, null, null);
 
-        return CreatedAtAction("GetCity", new { id = city.Id }, city);
+        return CreatedAtAction("GetCity", new { id = city.Id }, response);
     }
 
     // DELETE: api/Cities/5
