@@ -32,10 +32,11 @@ public class CountriesControllerIntegrationTests(CustomWebApplicationFactory fac
     public async Task GetCitiesByCountry_WhenCountryExists_ShouldReturnCitiesAnd200OK()
     {
         // Arrange
-        var countryId = Guid.Parse("A1B2C3D4-E5F6-7A8B-9C0D-E1F2A3B4C5D6");
+        var country = await GetCountryAsync();
+        await GetCityAsync(country);
 
         // Act
-        var response = await _client.GetAsync($"/api/countries/{countryId}/cities");
+        var response = await _client.GetAsync($"/api/countries/{country!.Id}/cities");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -80,6 +81,19 @@ public class CountriesControllerIntegrationTests(CustomWebApplicationFactory fac
         country.Should().NotBeNull();
         country.Id.Should().NotBe(Guid.Empty);
         country.CountryName.Should().Be(countryName);
+    }
+
+    private async Task<CountryResponse?> GetCountryAsync()
+    {
+        var countryName = $"Spain_{Guid.NewGuid().ToString()[..4]}";
+        var countryResponse = await _client.PostAsJsonAsync("/api/countries", new CountryAddRequest(countryName));
+        return await countryResponse.Content.ReadFromJsonAsync<CountryResponse>();
+    }
+    private async Task<CityResponse?> GetCityAsync(CountryResponse? country)
+    {
+        var cityName = $"Málaga_{Guid.NewGuid().ToString()[..4]}";
+        var cityResponse = await _client.PostAsJsonAsync("/api/cities", new CityAddRequest(cityName, country!.Id));
+        return await cityResponse.Content.ReadFromJsonAsync<CityResponse>();
     }
 
 }
