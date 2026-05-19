@@ -86,7 +86,15 @@ public class CitiesController : ControllerBase
         var tempCity = await _context.Cities.FindAsync(id);
         if (tempCity == null) return NotFound();
 
-        tempCity.Name = cityUpdateRequest.Name;
+        string cityName = cityUpdateRequest.Name.Trim();
+
+        bool cityExists = await _context.Cities.AnyAsync(c =>
+            c.Name == cityName && c.CountryId == cityUpdateRequest.CountryId && c.Id != id
+        );
+
+        if (cityExists) return Problem(detail: "City Exists", statusCode: 409, title: "Put City");
+
+        tempCity.Name = cityName;
         tempCity.CountryId = cityUpdateRequest.CountryId;
 
         try

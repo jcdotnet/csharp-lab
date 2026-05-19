@@ -69,13 +69,33 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
     }
 
     [Fact]
+    public async Task PostCity_WhenCityNameAlreadyExists_ShouldReturn409Conflict()
+    {
+        // Arrange
+        var country = await GetCountryAsync();
+        var cityName = $"DuplicateCity_{Guid.NewGuid().ToString()[..4]}";
+
+        await _client.PostAsJsonAsync("/api/cities", new CityAddRequest(cityName, country!.Id));
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/cities", new CityAddRequest(cityName, country.Id));
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        problemDetails.Should().NotBeNull();
+        problemDetails.Title.Should().Be("Post City");
+        problemDetails.Detail.Should().Be("City Exists");
+    }
+
+    [Fact]
     public async Task PostCity_WithValidData_ShouldReturn201CreatedAndCityResponse()
     {
         // Arrange
         var country = await GetCountryAsync();
      
-
-        var cityName = $"Barcelona_{Guid.NewGuid().ToString()[..4]}";
+        var cityName = $"Málaga_{Guid.NewGuid().ToString()[..4]}";
         var cityRequest = new CityAddRequest(cityName, country!.Id);
 
         // Act
@@ -106,6 +126,29 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task PutCity_WWhenCityNameAlreadyExists_ShouldReturn409Conflict()
+    {
+        // Arrange
+        var country = await GetCountryAsync();
+        var city = await GetCityAsync(country);
+        var existingCity = await GetCityAsync(country);
+
+        // Update the city using using the existing city name
+        var updateRequest = new CityUpdateRequest(city!.CityId, existingCity!.Name, country!.Id);
+
+        // Act
+        var response = await _client.PutAsJsonAsync($"/api/cities/{city.CityId}", updateRequest);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        problemDetails.Should().NotBeNull();
+        problemDetails.Title.Should().Be("Put City");
+        problemDetails.Detail.Should().Be("City Exists");
     }
 
     [Fact]
