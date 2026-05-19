@@ -5,7 +5,7 @@ namespace CitiesManager.Core.DTO;
 public record CityAddRequest(
     [Required]
     [StringLength(100, MinimumLength = 2)]
-    string CityName,
+    string Name,
 
     [Required]
     Guid CountryId
@@ -17,7 +17,7 @@ public record CityUpdateRequest(
 
     [Required]
     [StringLength(100, MinimumLength = 2)]
-    string CityName,
+    string Name,
 
     [Required]
     Guid CountryId
@@ -25,7 +25,7 @@ public record CityUpdateRequest(
 
 public record CityResponse(
     Guid CityId,
-    string CityName,
+    string Name,
     Guid CountryId,
 
     string? CountryName,

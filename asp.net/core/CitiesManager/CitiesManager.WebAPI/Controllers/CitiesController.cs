@@ -86,7 +86,7 @@ public class CitiesController : ControllerBase
         var tempCity = await _context.Cities.FindAsync(id);
         if (tempCity == null) return NotFound();
 
-        tempCity.Name = cityUpdateRequest.CityName;
+        tempCity.Name = cityUpdateRequest.Name;
         tempCity.CountryId = cityUpdateRequest.CountryId;
 
         try
@@ -118,7 +118,7 @@ public class CitiesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CityResponse>> PostCity([FromBody] CityAddRequest cityAddRequest)
     {
-        string cityName = cityAddRequest.CityName.Trim();
+        string cityName = cityAddRequest.Name.Trim();
 
         bool cityExists = await _context.Cities.AnyAsync(c =>
             c.Name == cityName && c.CountryId == cityAddRequest.CountryId

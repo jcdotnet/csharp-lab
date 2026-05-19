@@ -31,7 +31,7 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
         {
             var city = cities.First();
             city.CityId.Should().NotBe(Guid.Empty);
-            city.CityName.Should().NotBeNullOrWhiteSpace();
+            city.Name.Should().NotBeNullOrWhiteSpace();
         }
     }
 
@@ -64,6 +64,7 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
         var response = await _client.PostAsJsonAsync("/api/cities", request);
 
         // Assert
+        // Maybe TODO later: The fake CountryId triggers a database FOREIGN KEY error (in the logs)
         response.IsSuccessStatusCode.Should().BeFalse();
     }
 
@@ -86,7 +87,7 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
         var city = await response.Content.ReadFromJsonAsync<CityResponse>();
         city.Should().NotBeNull();
         city.CityId.Should().NotBe(Guid.Empty);
-        city.CityName.Should().Be(cityName);
+        city.Name.Should().Be(cityName);
     }
 
     // TODO: maybe consider removing the ID property from the DTO (same as I did in CityAddRequest)
@@ -113,7 +114,6 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
         // Arrange
         var country = await GetCountryAsync();
         var city = await GetCityAsync(country);
-
 
         // Act
         var response = await _client.GetAsync($"/api/cities/{city!.CityId}/Citizens");
@@ -161,7 +161,9 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
     public async Task PostCitizen_WithValidData_ShouldReturn201CreatedAndCitizenResponse()
     {
         // Arrange
-        var cityId = Guid.Parse("0DBF624E-7440-463F-A68E-0BC058DDF407");
+        var country = await GetCountryAsync();
+        var city = await GetCityAsync(country);
+
         var citizenName = $"Antonio_Banderas{Guid.NewGuid().ToString()[..4]}";
         var request = new
         {
@@ -171,7 +173,7 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync($"/api/cities/{cityId}/citizens", request);
+        var response = await _client.PostAsJsonAsync($"/api/cities/{city!.CityId}/citizens", request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
