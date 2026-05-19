@@ -156,7 +156,7 @@ public class AccountController : ControllerBase
         ApplicationUser? user = await _userManager.FindByEmailAsync(email);
 
         if (user == null || user.RefreshToken != token.RefreshToken
-            || user.RefreshTokenExpiration <= DateTime.Now)
+            || user.RefreshTokenExpiration <= DateTime.UtcNow)
         {
             return BadRequest("Invalid refresh token");
         }
