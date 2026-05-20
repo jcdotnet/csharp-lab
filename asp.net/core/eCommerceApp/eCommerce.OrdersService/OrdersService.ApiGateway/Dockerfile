@@ -11,10 +11,10 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["OrdersService.ApiGateway/OrdersService.ApiGateway.csproj", "OrdersService.ApiGateway/"]
+COPY ["eCommerce.OrdersService/OrdersService.ApiGateway/OrdersService.ApiGateway.csproj", "OrdersService.ApiGateway/"]
 RUN dotnet restore "./OrdersService.ApiGateway/OrdersService.ApiGateway.csproj"
 COPY . .
-WORKDIR "/src/OrdersService.ApiGateway"
+WORKDIR "/src/eCommerce.OrdersService/OrdersService.ApiGateway"
 RUN dotnet build "./OrdersService.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

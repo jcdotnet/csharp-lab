@@ -12,10 +12,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["eCommerce.API/eCommerce.API.csproj", "eCommerce.API/"]
+COPY ["eCommerce.UsersService/eCommerce.API/eCommerce.API.csproj", "eCommerce.API/"]
 RUN dotnet restore "./eCommerce.API/eCommerce.API.csproj"
 COPY . .
-WORKDIR "/src/eCommerce.API"
+WORKDIR "/src/eCommerce.UsersService/eCommerce.API"
 RUN dotnet build "./eCommerce.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

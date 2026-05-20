@@ -3,7 +3,7 @@ services:
     image: ordersmicroserviceapi
     build:
       context: .
-      dockerfile: OrdersService.API/Dockerfile
+      dockerfile: eCommerce.OrdersService/OrdersService.API/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - MONGODB_HOST=mongodb-container
@@ -32,11 +32,14 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ../mongodb-init:/docker-entrypoint-initdb.d
+      - ./mongodb-init:/docker-entrypoint-initdb.d
     networks:
       - orders-mongodb-network 
   products-microservice:
     image: products-microservice:latest
+    build:
+      context: .
+      dockerfile: eCommerce.ProductsService/eCommerce.API/Dockerfile
     environment:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_ENVIRONMENT=Development
@@ -63,11 +66,14 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ../mysql-init:/docker-entrypoint-initdb.d
+      - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - products-mysql-network
   users-microservice: 
     image: users-microservice:latest
+    build:
+      context: .
+      dockerfile: eCommerce.UsersService/eCommerce.API/Dockerfile
     environment:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_ENVIRONMENT=Development
@@ -92,7 +98,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ../postgres-init:/docker-entrypoint-initdb.d
+      - ./postgres-init:/docker-entrypoint-initdb.d
     networks:
       - users-postgres-network
   redis:
@@ -100,14 +106,14 @@ services:
     ports: 
       - "6376:6379"
     volumes:
-      - ../redis-cache:/data
+      - ./redis-cache:/data
     networks:
       - ecommerce-network
   apigateway:
     image: apigateway:latest
     build:
       context: .
-      dockerfile: OrdersService.ApiGateway/Dockerfile
+      dockerfile: eCommerce.OrdersService/OrdersService.ApiGateway/Dockerfile
     ports: 
       - "4000:8080"
     networks:
