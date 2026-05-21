@@ -6,4 +6,5 @@
   <Project Path="OrdersService.ApiGateway/OrdersService.ApiGateway.csproj" Id="5e8e2299-a135-4e8a-aeb5-be7206666fda" />
   <Project Path="OrdersService.BusinessLogicLayer/OrdersService.BusinessLogicLayer.csproj" />
   <Project Path="OrdersService.DataAccessLayer/OrdersService.DataAccessLayer.csproj" />
+  <Project Path="OrdersService.Test/OrdersService.Test.csproj" />
 </Solution>

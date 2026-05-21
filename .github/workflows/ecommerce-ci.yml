@@ -1,0 +1,34 @@
+name: eCommerceApp CI
+
+on:
+  push:
+    branches: [ dev ]
+    paths:
+      - 'asp.net/core/eCommerceApp/**'
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Build
+      run: |
+        dotnet build asp.net/core/eCommerceApp/eCommerce.OrdersService/eCommerce.OrdersService.slnx --configuration Release
+        dotnet build asp.net/core/eCommerceApp/eCommerce.ProductsService/eCommerce.ProductsService.slnx --configuration Release
+        dotnet build asp.net/core/eCommerceApp/eCommerce.UsersService/eCommerce.UsersService.slnx --configuration Release
+
+    # - name: Docker Compose (not needed because we only run unit tests for now)
+    #  run: docker compose -f asp.net/core/eCommerceApp/docker-compose.yml up -d
+
+    - name: Run Product Tests
+      run: dotnet test asp.net/core/eCommerceApp/eCommerce.ProductsService/eCommerce.ProductsService.slnx --no-build --configuration Release
