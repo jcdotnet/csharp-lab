@@ -11,14 +11,25 @@ namespace OrdersService.BusinessLogicLayer.RabbitMQ
     {
 
         private readonly IConfiguration _configuration;
-        private readonly IConnection _connection;
-        private readonly IChannel _channel;
         private readonly ILogger<RabbitMQProductNameUpdateConsumer> _logger;
+        private IConnection? _connection;
+        private IChannel? _channel;
 
-        public RabbitMQProductNameUpdateConsumer(IConfiguration configuration, 
+        public RabbitMQProductNameUpdateConsumer(IConfiguration configuration,
             ILogger<RabbitMQProductNameUpdateConsumer> logger)
         {
             _configuration = configuration;
+            _logger = logger;
+        }
+
+        public void Dispose()
+        {
+            _channel?.Dispose();
+            _connection?.Dispose();
+        }
+
+        public async Task ConsumeAsync()
+        {
             var connectionFactory = new ConnectionFactory()
             {
                 HostName = _configuration["RABBITMQ_HOST"]!,
@@ -26,21 +37,10 @@ namespace OrdersService.BusinessLogicLayer.RabbitMQ
                 UserName = _configuration["RABBITMQ_USER"]!,
                 Password = _configuration["RABBITMQ_PASS"]!,
             };
-            // INFRASTRUCTURE NOTE: .GetResult() blocks the thread and requires RabbitMQ to be fully ready.
-            // It works now because the Docker Compose dependency delays startup until RabbitMQ is healthy.
-            _connection = connectionFactory.CreateConnectionAsync().GetAwaiter().GetResult();
-            _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
-            _logger = logger;
-        }
 
-        public void Dispose()
-        {
-            _channel.Dispose();
-            _connection.Dispose();
-        }
+            _connection = await connectionFactory.CreateConnectionAsync();
+            _channel = await _connection.CreateChannelAsync();
 
-        public async Task ConsumeAsync()
-        {
             string routingKey = "product.update.name"; // binding key
             string queueName = "orders.product.update.name.queue";
 
@@ -54,8 +54,8 @@ namespace OrdersService.BusinessLogicLayer.RabbitMQ
                 autoDelete: false,
                 arguments: null
             );
-            await _channel.QueueBindAsync(queueName, exchangeName,routingKey);
-       
+            await _channel.QueueBindAsync(queueName, exchangeName, routingKey);
+
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
             // the Received event will be fired as soon as the message is received in the message queue
