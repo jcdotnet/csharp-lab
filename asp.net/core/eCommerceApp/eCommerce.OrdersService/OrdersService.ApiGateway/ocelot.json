@@ -40,7 +40,7 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/orders/search/date/{oderDate}",
+      "UpstreamPathTemplate": "/gateway/orders/search/date/{orderDate}",
       "DownstreamPathTemplate": "/api/orders/search/date/{orderDate}",
       "DownstreamHostAndPorts": [
         {
