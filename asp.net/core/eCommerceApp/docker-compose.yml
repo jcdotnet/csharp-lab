@@ -26,7 +26,10 @@ services:
       - orders-mongodb-network
       - ecommerce-network
     depends_on:
-      - mongodb-container
+      mongodb-container:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
   mongodb-container:
     image: mongo:latest
     ports:
@@ -126,6 +129,9 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=password 
+    healthcheck:
+      test: rabbitmq-diagnostics -q check_running
+      interval: 5s
     networks:
       - ecommerce-network
 networks:
