@@ -26,6 +26,8 @@ namespace OrdersService.BusinessLogicLayer.RabbitMQ
                 UserName = _configuration["RABBITMQ_USER"]!,
                 Password = _configuration["RABBITMQ_PASS"]!,
             };
+            // INFRASTRUCTURE NOTE: .GetResult() blocks the thread and requires RabbitMQ to be fully ready.
+            // It works now because the Docker Compose dependency delays startup until RabbitMQ is healthy.
             _connection = connectionFactory.CreateConnectionAsync().GetAwaiter().GetResult();
             _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
             _logger = logger;
