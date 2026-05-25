@@ -7,12 +7,18 @@ using Classes;
 
 Console.WriteLine("LINQ");
 
+/**
+ * Numbers
+ */
 List<int> list = [23, 75, 30, 34, 98, 27, 0];
 
 var filteredNumbers = list.Where(number => number > 50); // IEnumerable<int>
 Console.WriteLine("Numbers greater than 50:");
 foreach (int number in filteredNumbers) Console.WriteLine(number);
 
+/**
+ * Employess
+ */
 List<Employee> employees =
 [
     new Employee() { Id = 100, Name = "John", Position = "Developer", Location = "NYC" },
@@ -62,6 +68,9 @@ var singleDev = employees.Where(emp => emp.Location == "Málaga").Single(); // E
 // projection (select)
 var employesIds = employees.Select(emp => emp.Id); // IEnumerable<Int>
 
+/**
+ * Students
+ */
 List<Student> students =
 [
     new Student("John", 20),
@@ -69,9 +78,23 @@ List<Student> students =
     new Student("Daniel", 21),
 ];
 
+// returns students name
 var studentNames = students.Select(student => student.Name);
+// returns an anonymous  object with name and age 
+var studentProfiles = students.Select(student => new
+{
+    student.Name,
+    IsAdult = student.Age >= 18,
+    FormatLabel = $"Student: {student.Name} ({student.Age} year-old)"
+});
+foreach (var profile in studentProfiles)
+{
+    Console.WriteLine(profile.FormatLabel);
+    Console.WriteLine();
+}
 
-var adultNames = students.Where(student => student.Age > 18).Select(student => student.Name);
+//var adultNames = students.Where(student => student.Age > 18).Select(student => student.Name);
+var adultNames = studentProfiles.Where(p => p.IsAdult).Select(p => p.Name);
 
 // More on LINQ (aggregation methods): Min, Max, Count, Sum, Average
 int ageSum = students.Sum(sum => sum.Age);
