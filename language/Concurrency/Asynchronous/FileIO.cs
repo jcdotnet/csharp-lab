@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Asyncrhonous
+﻿namespace Asyncrhonous
 {
     class FileWriter
     {
@@ -33,7 +27,7 @@ namespace Asyncrhonous
 
     internal class FileIO
     {
-        public async static void Demo()
+        public static async Task Demo()
         {
             //File.Create("demo.txt").Close();
             string fileName = "demo.txt";

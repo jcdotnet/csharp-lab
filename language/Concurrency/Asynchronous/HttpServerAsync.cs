@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Asyncrhonous
+﻿namespace Asyncrhonous
 {
-    public class HttpServerAsync
+    public class HttpServerAsync(string url)
     {
-        private readonly string _url;
-        public HttpServerAsync(string url)
-        {
-            _url = url;
-        }
-        public async Task<string> GetUrlContent()
+        public string Url => url;
+        public int SimulatedDelay { get; set; }
+
+        public async Task<string> GetUrlContentAsync(CancellationToken cancellationToken, int simulatedDelay = 0)
         {
             using var client = new HttpClient();
-            Task<string> getStringTask =
-                client.GetStringAsync(_url);
 
-            DoIndependentWork();
-            return await getStringTask;                    
+            Task<string> getStringTask = client.GetStringAsync(url, cancellationToken);
+
+            Task independentWorkTask = DoIndependentWork(cancellationToken, simulatedDelay);
+
+            await Task.WhenAll(getStringTask, independentWorkTask);
+
+            return await getStringTask;
+
         }
 
-        void DoIndependentWork()
+        private async Task DoIndependentWork(CancellationToken cancellationToken, int simulatedDelay)
         {
+            if (simulatedDelay > 0) await Task.Delay(TimeSpan.FromSeconds(simulatedDelay), cancellationToken);
+            
             Console.WriteLine("Some independent work...");
         }
     }
