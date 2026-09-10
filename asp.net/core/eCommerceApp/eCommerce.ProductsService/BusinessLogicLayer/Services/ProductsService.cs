@@ -3,7 +3,6 @@ using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.RabbitMQ;
 using BusinessLogicLayer.ServiceContracts;
 using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories;
 using DataAccessLayer.RepositoryContracts;
 using FluentValidation;
 using System.Linq.Expressions;

@@ -40,6 +40,8 @@ public class ProductsServiceTest
         );
     }
 
+    #region AddProduct
+
     [Fact]
     public async Task AddProduct_ShouldAddValidProduct()
     {
@@ -50,7 +52,7 @@ public class ProductsServiceTest
 
         _productAddRequestValidatorMock
             .Setup(validator => validator.ValidateAsync(
-                It.IsAny<ProductAddRequest>(), 
+                It.IsAny<ProductAddRequest>(),
                 It.IsAny<CancellationToken>())
             ).ReturnsAsync(new ValidationResult());
 
@@ -77,7 +79,7 @@ public class ProductsServiceTest
 
         _productAddRequestValidatorMock
             .Setup(validator => validator.ValidateAsync(
-                It.IsAny<ProductAddRequest>(), 
+                It.IsAny<ProductAddRequest>(),
                 It.IsAny<CancellationToken>())
         ).ReturnsAsync(validationResult);
 
@@ -88,6 +90,35 @@ public class ProductsServiceTest
         await act.Should().ThrowAsync<ArgumentException>().WithMessage("Error");
         _productsRepositoryMock.Verify(repo => repo.AddProduct(It.IsAny<Product>()), Times.Never);
     }
+
+    [Fact]
+    public async Task AddProduct_ShouldThrowArgumentExceptionWhenValidationFails()
+    {
+        // Arrange
+        var productAddRequest = _fixture.Create<ProductAddRequest>();
+        var validationFailures = new List<ValidationFailure>
+        {
+            new("ProductName", "Name is required"),
+            new("UnitPrice", "Unit price must be greater than zero")
+        };
+        var validationResult = new ValidationResult(validationFailures);
+
+        _productAddRequestValidatorMock
+            .Setup(validator => validator.ValidateAsync(
+                It.IsAny<ProductAddRequest>(), It.IsAny<CancellationToken>())
+            ).ReturnsAsync(validationResult);
+
+        // Act
+        Func<Task> act = async () => await _productsService.AddProduct(productAddRequest);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentException>()
+                 .WithMessage("Name is required,Unit price must be greater than zero");
+        _productsRepositoryMock.Verify(repo => repo.AddProduct(It.IsAny<Product>()), Times.Never);
+    }
+    #endregion
+
+    #region GetProduct
 
     [Fact]
     public async Task GetProducts_ShouldReturnAllProducts()
@@ -127,6 +158,26 @@ public class ProductsServiceTest
         result.Should().Be(productResponse);
     }
 
+
+    [Fact]
+    public async Task GetProduct_ShouldReturnNullWhenNoProductMatchesCondition()
+    {
+        // Arrange
+        Product? product = null;
+        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
+                               .ReturnsAsync(product);
+
+        // Act
+        var result = await _productsService.GetProduct(p => p.ProductId == Guid.NewGuid());
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    #endregion
+
+    #region UpdateProduct
+
     [Fact]
     public async Task UpdateProduct_ShouldUpdateExistingProduct()
     {
@@ -154,65 +205,6 @@ public class ProductsServiceTest
         result.Should().NotBeNull();
         result.Should().Be(updatedProductResponse);
         _productsRepositoryMock.Verify(repo => repo.UpdateProduct(product), Times.Once);
-    }
-
-    [Fact]
-    public async Task DeleteProduct_ShouldReturnTrueWhenProductIsDeleted()
-    {
-        // Arrange
-        var productID = _fixture.Create<Guid>();
-        var existingProduct = _fixture.Create<Product>();
-
-        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
-                               .ReturnsAsync(existingProduct);
-        _productsRepositoryMock.Setup(repo => repo.DeleteProduct(productID)).ReturnsAsync(true);
-
-        // Act
-        var result = await _productsService.DeleteProduct(productID);
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task AddProduct_ShouldThrowArgumentExceptionWhenValidationFails()
-    {
-        // Arrange
-        var productAddRequest = _fixture.Create<ProductAddRequest>();
-        var validationFailures = new List<ValidationFailure>
-    {
-        new ValidationFailure("ProductName", "Name is required"),
-        new ValidationFailure("UnitPrice", "Unit price must be greater than zero")
-    };
-        var validationResult = new ValidationResult(validationFailures);
-
-        _productAddRequestValidatorMock
-            .Setup(validator => validator.ValidateAsync(
-                It.IsAny<ProductAddRequest>(), It.IsAny<CancellationToken>())
-            ).ReturnsAsync(validationResult);
-
-        // Act
-        Func<Task> act = async () => await _productsService.AddProduct(productAddRequest);
-
-        // Assert
-        await act.Should().ThrowAsync<ArgumentException>()
-                 .WithMessage("Name is required,Unit price must be greater than zero");
-        _productsRepositoryMock.Verify(repo => repo.AddProduct(It.IsAny<Product>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task GetProduct_ShouldReturnNullWhenNoProductMatchesCondition()
-    {
-        // Arrange
-        Product? product = null;
-        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
-                               .ReturnsAsync(product);
-
-        // Act
-        var result = await _productsService.GetProduct(p => p.ProductId == Guid.NewGuid());
-
-        // Assert
-        result.Should().BeNull();
     }
 
     [Fact]
@@ -250,7 +242,7 @@ public class ProductsServiceTest
         _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
                                .ReturnsAsync(existingProduct);
         _productUpdateRequestValidatorMock.Setup(validator => validator.ValidateAsync(
-            It.IsAny<ProductUpdateRequest>(), 
+            It.IsAny<ProductUpdateRequest>(),
             It.IsAny<CancellationToken>())
         ).ReturnsAsync(validationResult);
 
@@ -261,6 +253,122 @@ public class ProductsServiceTest
         await act.Should().ThrowAsync<ArgumentException>()
                  .WithMessage("Product name is required,Unit price must be greater than zero");
         _productsRepositoryMock.Verify(repo => repo.UpdateProduct(It.IsAny<Product>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateProduct_ShouldPublishMessage_WhenProductNameChanges()
+    {
+        // Arrange
+        var productUpdateRequest = _fixture.Build<ProductUpdateRequest>()
+            .With(x => x.ProductName, "New Name")
+            .Create();
+
+        var existingProduct = _fixture.Build<Product>()
+            .With(x => x.ProductName, "Name")
+            .Create();
+
+        var product = _fixture.Create<Product>();
+        var updatedProductResponse = _fixture.Create<ProductResponse>();
+
+        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
+                            .ReturnsAsync(existingProduct);
+
+        _productUpdateRequestValidatorMock.Setup(validator => validator.ValidateAsync(
+            It.IsAny<ProductUpdateRequest>(),
+            It.IsAny<CancellationToken>())
+        ).ReturnsAsync(new ValidationResult());
+
+        _mapperMock
+            .Setup(m => m.Map<Product>(productUpdateRequest))
+            .Returns(product);
+
+        _productsRepositoryMock
+            .Setup(repo => repo.UpdateProduct(product))
+            .ReturnsAsync(product);
+
+        _mapperMock
+            .Setup(m => m.Map<ProductResponse>(product))
+            .Returns(updatedProductResponse);
+
+        // Act
+        var result = await _productsService.UpdateProduct(productUpdateRequest);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(updatedProductResponse);
+        _rabbitMQPublisherMock.Verify(
+            publisher => publisher.Publish("product.update.name", It.IsAny<ProductNameUpdateMessage>()),
+            Times.Once
+        );
+    }
+
+    [Fact]
+    public async Task UpdateProduct_ShouldNotPublishMessage_WhenProductNameDoesNotChange()
+    {
+        // Arrange
+        var productUpdateRequest = _fixture.Build<ProductUpdateRequest>()
+            .With(x => x.ProductName, "Name")
+            .Create();
+
+        var existingProduct = _fixture.Build<Product>()
+            .With(x => x.ProductName, "Name")
+            .Create();
+
+        var product = _fixture.Create<Product>();
+        var updatedProductResponse = _fixture.Create<ProductResponse>();
+
+        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
+                            .ReturnsAsync(existingProduct);
+
+        _productUpdateRequestValidatorMock.Setup(validator => validator.ValidateAsync(
+            It.IsAny<ProductUpdateRequest>(),
+            It.IsAny<CancellationToken>())
+        ).ReturnsAsync(new ValidationResult());
+
+        _mapperMock
+            .Setup(m => m.Map<Product>(productUpdateRequest))
+            .Returns(product);
+
+        _productsRepositoryMock
+            .Setup(repo => repo.UpdateProduct(product))
+            .ReturnsAsync(product);
+
+        _mapperMock
+            .Setup(m => m.Map<ProductResponse>(product))
+            .Returns(updatedProductResponse);
+
+        // Act
+        var result = await _productsService.UpdateProduct(productUpdateRequest);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().Be(updatedProductResponse);
+        _rabbitMQPublisherMock.Verify(
+            publisher => publisher.Publish("product.update.name", It.IsAny<ProductNameUpdateMessage>()),
+            Times.Never
+        );
+    }
+
+    #endregion
+
+    #region DeleteProduct
+
+    [Fact]
+    public async Task DeleteProduct_ShouldReturnTrueWhenProductIsDeleted()
+    {
+        // Arrange
+        var productID = _fixture.Create<Guid>();
+        var existingProduct = _fixture.Create<Product>();
+
+        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
+                               .ReturnsAsync(existingProduct);
+        _productsRepositoryMock.Setup(repo => repo.DeleteProduct(productID)).ReturnsAsync(true);
+
+        // Act
+        var result = await _productsService.DeleteProduct(productID);
+
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -279,4 +387,49 @@ public class ProductsServiceTest
         result.Should().BeFalse();
         _productsRepositoryMock.Verify(repo => repo.DeleteProduct(It.IsAny<Guid>()), Times.Never);
     }
+
+    [Fact]
+    public async Task DeleteProduct_ShouldPublishMessage_WhenProductIsDeleted()
+    {
+        // Arrange
+        Guid productId = _fixture.Create<Guid>();
+        var existingProduct = _fixture.Create<Product>();
+
+        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
+                               .ReturnsAsync(existingProduct);
+        _productsRepositoryMock.Setup(repo => repo.DeleteProduct(productId)).ReturnsAsync(true);
+
+        // Act
+        var result = await _productsService.DeleteProduct(productId);
+
+        // Assert
+        result.Should().BeTrue();
+        _rabbitMQPublisherMock.Verify(
+            publisher => publisher.Publish("product.delete", It.IsAny<ProductDeletionMessage>()),
+            Times.Once
+        );
+    }
+
+    [Fact]
+    public async Task DeleteProduct_ShouldNotPublishMessage_WhenProductCouldNotBeDeleted()
+    {
+        // Arrange
+        Guid productId = _fixture.Create<Guid>();
+        Product? product = null;
+        _productsRepositoryMock.Setup(repo => repo.GetProduct(It.IsAny<Expression<Func<Product, bool>>>()))
+                               .ReturnsAsync(product);
+
+        // Act
+        var result = await _productsService.DeleteProduct(productId);
+
+        // Assert
+        result.Should().BeFalse();
+        _productsRepositoryMock.Verify(repo => repo.DeleteProduct(It.IsAny<Guid>()), Times.Never);
+        _rabbitMQPublisherMock.Verify(
+            publisher => publisher.Publish("product.delete", It.IsAny<ProductDeletionMessage>()),
+            Times.Never
+        );
+    }
+
+    #endregion
 }
