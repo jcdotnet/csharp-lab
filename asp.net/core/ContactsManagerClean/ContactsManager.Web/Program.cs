@@ -10,7 +10,8 @@ var app = builder.Build();
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-} else
+}
+else
 {
     app.UseExceptionHandlingMiddleware();
 }

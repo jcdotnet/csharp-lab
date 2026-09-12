@@ -47,7 +47,7 @@ namespace ContactsManager.Web.Controllers
                 Name    = user.Name,
             };
 
-            IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
+            IdentityResult result = await _userManager.CreateAsync(appUser, user.Password!);
 
             if (result.Succeeded)
             {
@@ -96,7 +96,7 @@ namespace ContactsManager.Web.Controllers
                 return View(user);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, 
+            var result = await _signInManager.PasswordSignInAsync(user.Email!, user.Password!, 
                 isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)

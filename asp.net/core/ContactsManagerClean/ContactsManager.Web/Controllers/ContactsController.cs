@@ -13,8 +13,6 @@ namespace ContactsManager.Web.Controllers
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = ["X-Controller-Key", "MyValue"])]
     public class ContactsController : Controller
     {
-
-        private ICountriesAdderService _countriesAdderService;
         private ICountriesGetterService _countriesGetterService;
         private IContactsAdderService _contactsAdderService;
         private IContactsGetterService _contactsGetterService;

@@ -1,41 +1,29 @@
-﻿namespace ContactsManager.Middleware
-{
-    public class ExceptionHandlingMiddleware
-    {
-        private readonly RequestDelegate _next; // reference of subsequent middleware
-        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+﻿using Microsoft.AspNetCore.Mvc;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
-        {
-            _next = next;
-            _logger = logger;
-        }
+namespace ContactsManager.Middleware
+{
+    public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+    {
 
         public async Task Invoke(HttpContext httpContext)
         {
             try
             {
-                await _next(httpContext);
+                await next(httpContext); // reference of subsequent middleware
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    _logger.LogError("{ExceptionType} {ExceptionMessage}", 
-                        ex.InnerException.GetType().ToString(), 
-                        ex.InnerException.Message
-                    );
-                }
-                else
-                {
-                    _logger.LogError("{ExceptionType} {ExceptionMessage}", 
-                        ex.GetType().ToString(), 
-                        ex.Message
-                    );
-                }
+                logger.LogError(ex, "An unexpected error occurred");
 
-                httpContext.Response.StatusCode = 500;
-                await httpContext.Response.WriteAsync("An error occurred");
+                // Return a standardized API error response instead of writing plain text
+
+                httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
+                {
+                    Status = StatusCodes.Status500InternalServerError,
+                    Title = "An unexpected error occurred"
+                });
             }
         }
     }
@@ -43,9 +31,12 @@
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class ExceptionHandlingMiddlewareExtensions
     {
-        public static IApplicationBuilder UseExceptionHandlingMiddleware(this IApplicationBuilder builder)
+        extension(IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<ExceptionHandlingMiddleware>();
+            public IApplicationBuilder UseExceptionHandlingMiddleware()
+            {
+                return builder.UseMiddleware<ExceptionHandlingMiddleware>();
+            }
         }
     }
 }

@@ -26,7 +26,7 @@
                 <div class="flex-1 pr search-box">
                     <div class="navbar account-links">
                         <ul>
-                            @if (User.Identity.IsAuthenticated)
+                            @if (User.Identity?.IsAuthenticated == true)
                             {
                                 <li>
                                     <i class="fa-solid fa-user"></i>
