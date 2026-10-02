@@ -6,7 +6,7 @@ using eCommerce.Domain.Entities;
 
 namespace eCommerce.Application.Services
 {
-    internal class UsersService : IUsersService
+    public class UsersService : IUsersService
     {
         private readonly IUsersRepository _usersRepository;
         private readonly IMapper _mapper;
