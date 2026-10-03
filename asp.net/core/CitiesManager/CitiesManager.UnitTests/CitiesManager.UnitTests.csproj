@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CitiesManager.WebApi\CitiesManager.WebApi.csproj" />
+    <ProjectReference Include="..\CitiesManager.WebAPI\CitiesManager.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

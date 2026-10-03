@@ -47,5 +47,5 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet ef database update --project CitiesManager.Infrastructure/CitiesManager.Infrastructure.csproj --startup-project CitiesManager.WebAPI/CitiesManager.WebAPI.csproj --configuration Release
 
-    - name: Run integration tests
+    - name: Run tests
       run: dotnet test --no-build --configuration Release
