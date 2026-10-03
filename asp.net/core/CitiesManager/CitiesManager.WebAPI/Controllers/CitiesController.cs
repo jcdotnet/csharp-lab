@@ -61,7 +61,7 @@ public class CitiesController : ControllerBase
         if (cityResponse == null)
         {
             //return NotFound();
-            return Problem(detail: "Invalid City Id", statusCode: 400, title: "Get City");
+            return Problem(detail: "Invalid City Id", statusCode: 404, title: "Get City");
         }
 
         return cityResponse;

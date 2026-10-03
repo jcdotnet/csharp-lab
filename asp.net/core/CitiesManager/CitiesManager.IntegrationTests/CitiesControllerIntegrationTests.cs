@@ -36,7 +36,7 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
     }
 
     [Fact]
-    public async Task GetCity_WhenCityDoesNotExist_ShouldReturn400BadRequestAndProblemDetails()
+    public async Task GetCity_WhenCityDoesNotExist_ShouldReturn404NotFoundAndProblemDetails()
     {
         // Arrange
         var cityId = Guid.NewGuid();
@@ -45,7 +45,7 @@ public class CitiesControllerIntegrationTests(CustomWebApplicationFactory factor
         var response = await _client.GetAsync($"/api/cities/{cityId}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         var problemDeatils = await response.Content.ReadFromJsonAsync<ProblemDetails>();
         problemDeatils.Should().NotBeNull();

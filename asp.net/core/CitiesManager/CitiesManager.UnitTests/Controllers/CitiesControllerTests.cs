@@ -42,7 +42,7 @@ public class CitiesControllerTests
     }
 
     [Fact]
-    public async Task GetCity_ShouldReturnBadRequest_WhenCityDoesNotExist()
+    public async Task GetCity_ShouldReturnNotFound_WhenCityDoesNotExist()
     {
         // Arrange
         var cityId = Guid.NewGuid();
@@ -55,7 +55,7 @@ public class CitiesControllerTests
 
         // Assert
         result.Result.Should().BeOfType<ObjectResult>(); // Problem() returns an ObjectResult
-        result.Result.As<ObjectResult>().StatusCode.Should().Be(400);
+        result.Result.As<ObjectResult>().StatusCode.Should().Be(404);
     }
 
     #endregion

@@ -44,9 +44,9 @@ public class CountriesControllerTests
         result.Value.Id.Should().Be(country.Id);
         result.Value.CountryName.Should().Be(country.Name);
     }
-
+    
     [Fact]
-    public async Task GetCountry_ShouldReturnBadRequest_WhenCountryDoesNotExist()
+    public async Task GetCountry_ShouldReturnNotFound_WhenCountryDoesNotExist()
     {
         // Arrange
         var countryId = Guid.NewGuid();
@@ -59,7 +59,7 @@ public class CountriesControllerTests
 
         // Assert
         result.Result.Should().BeOfType<ObjectResult>(); // Problem() returns an ObjectResult
-        result.Result.As<ObjectResult>().StatusCode.Should().Be(400);
+        result.Result.As<ObjectResult>().StatusCode.Should().Be(404);
     }
 
     #endregion
