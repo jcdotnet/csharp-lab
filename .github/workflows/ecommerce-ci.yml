@@ -32,3 +32,9 @@ jobs:
 
     - name: Run Product Tests
       run: dotnet test asp.net/core/eCommerceApp/eCommerce.ProductsService/eCommerce.ProductsService.slnx --no-build --configuration Release
+
+    - name: Run User Tests
+      run: dotnet test asp.net/core/eCommerceApp/eCommerce.UsersService/eCommerce.UsersService.slnx --no-build --configuration Release
+
+    - name: Run Order Tests
+      run: dotnet test asp.net/core/eCommerceApp/eCommerce.OrdersService/eCommerce.OrdersService.slnx --no-build --configuration Release
