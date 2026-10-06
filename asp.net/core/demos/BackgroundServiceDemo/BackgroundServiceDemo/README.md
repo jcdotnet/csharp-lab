@@ -1,0 +1,1 @@
+﻿This demo shows the current weather using a `BackgroundService`
