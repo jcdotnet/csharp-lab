@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Noticore API",
         Version = "v1",
-        Description = "API for managing notifications with Polly and MailKit"
+        Description = "API for managing notifications"
     });
 });
 

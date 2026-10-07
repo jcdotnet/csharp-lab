@@ -8,21 +8,33 @@ namespace Noticore.Infrastructure.Services
 {
     public class SmtpEmailService : IEmailService
     {
-        private readonly AsyncRetryPolicy _retryPolicy; // Policy as a field to keep the code clean
+        private readonly ResiliencePipeline _pipeline; //  Resilience Policy 
         public SmtpEmailService()
         {
-            _retryPolicy = Policy // Retry 3 times, waiting 2 seconds between each attempt
-                .Handle<Exception>()
-                .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2), (exception, timeSpan, retryCount, context) =>
+            _pipeline = new ResiliencePipelineBuilder()
+                .AddRetry(new RetryStrategyOptions
                 {
-                    // This logic runs every time a retry is triggered
-                    Console.WriteLine($"[RETRY {retryCount}] Error: {exception.Message}. Waiting {timeSpan.TotalSeconds}s...");
-                });
+                    MaxRetryAttempts = 3,
+                    Delay = TimeSpan.FromSeconds(2),
+                    BackoffType = DelayBackoffType.Exponential,
+                    OnRetry = args =>
+                    {
+                        // This logic runs every time a retry is triggered
+                        var retryCount = args.AttemptNumber + 1;
+                        var exception = args.Outcome.Exception?.Message;
+                        var totalSeconds = args.RetryDelay.TotalSeconds;
+
+                        Console.WriteLine($"[RETRY {retryCount}] Error: {exception}. Waiting {totalSeconds}s...");
+
+                        return default;
+                    }
+                })
+                .Build();
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
-            await _retryPolicy.ExecuteAsync(async () =>
+            await _pipeline.ExecuteAsync(async _ =>
             {
                 // To test the retry, we could uncomment the next line:
                 // throw new Exception("Temporary connection issue");
@@ -36,7 +48,8 @@ namespace Noticore.Infrastructure.Services
                 using var client = new SmtpClient();
 
                 // Connect to the SMTP server (using Mailtrap for testing)
-                await client.ConnectAsync("sandbox.smtp.mailtrap.io", 587, MailKit.Security.SecureSocketOptions.StartTls);
+                await client.ConnectAsync("sandbox.smtp.mailtrap.io", 587,
+                    MailKit.Security.SecureSocketOptions.StartTls);
 
                 // Authenticate with your credentials
                 await client.AuthenticateAsync("mailtrap_username_here", "mailtrap_password_here");

@@ -1,40 +1,56 @@
-# Noticore
+# Noticore (notifications + .NET Core)
 
-Async notifications for .NET 10
+I created this project as a LAB to experiment with decoupling using MediatR and Domain Events instead of a service layer.
 
-## Architecture & Project Structure
+I'm aware that this approach could be considered overengineering for such a simple notification app, but that is completely intentional here. 
 
-I created this project to experiment with decoupling using MediatR and Domain Events instead of a traditional service layer.
+## Clean Architecture
+* **Noticore.Domain:** Entities, enums and business rules.
+* **Noticore.Application:** Commands, queries and event handlers.
+* **Noticore.Infrastructure:** EF Core persistence and notification services (real and fake for dev)
 
-It is built as an **ASP.NET Core Web API** following **Clean Architecture** using **CQRS** (MediatR) and **Domain Events** to decouple the notification lifecycle:
+## Notifications
 
-* **Noticore.Domain:** Core entities, Enums, and business rules.
-* **Noticore.Application:** Use cases (Commands/Queries) and Async Event Consumers.
-* **Noticore.Infrastructure:** Persistence via **EF Core** and external providers (Email/Fake).
+Every notification is stored in the database with `Pending` status.
 
-When running in a production environment, the system swaps the provider for a robust `SmtpEmailService`. This ensures real notifications are dispatched via an SMTP gateway, completing the professional lifecycle.
+Then the notification is processed and the email is sent:
 
-* **Async Lifecycle:** When a notification is requested, it is stored as `Pending`. A domain event is then published via MediatR and handled asynchronously, updating the status to `Sent` once the provider successfully processes the message.
+- If the email is sent successfully, the status becomes `Sent`.
+- If the email fails after the retries, the status becomes `Failed`.
 
-**Quick Notes:**
-* *MediatR:* I am aware that using MediatR for a simple notification flow might be over-engineering. In this case, a traditional service layer might be more straightforward.
-* *In-Memory:* Since everything runs in the application's memory, if it crashes or restarts before sending the email, pending emails are lost. If I need a safe solution later, I will study background tasks or message queues.
+Note: SMS and push notifications not implemented yet.
+
+## Email service
+
+I have implemented a fake email service for development, so you don't need to set up a real SMTP server to test the application.
+
+## Polly
+
+The SMTP service uses Polly to experiment with retry and resilience.
+
+The current retry configuration uses exponential backoff : 2s -> retry -> 4s -> retry -> 8s -> ...
+
+To test the retry behavior, I can temporarily uncomment this line in `SmtpEmailService`:
+
+`throw new Exception("Temporary connection issue");`
 
 ## Local Development (No SMTP required)
 
-I have implemented a **pre-configured development environment** so you don't need to set up a real SMTP server to test the end-to-end flow:
-
-1. **Run the project:** `dotnet run --project Noticore.Api`
-2. **Open Swagger:** `https://localhost:[PORT]/swagger`
-3. **Test the flow:** Use the `POST /api/Notifications` endpoint with this sample JSON:
+1. Run the API: `dotnet run --project Noticore.Api`
+2. Open Swagger: `https://localhost:[PORT]/swagger`
+3. Create a notification using POST /api/Notifications:
 
 ```json
 {
-  "title": "Welcome to NotiCore",
-  "message": "Testing the infrastructure decoupling flow.",
+  "title": "Test notification",
+  "message": "Test message",
   "recipient": "dev@example.com",
   "type": 0
 }
 ```
 
-Development Mode: The system automatically injects a `FakeEmailService`. Instead of hitting a real SMTP gateway, a local folder named `/SentEmails` is created in the project root with a `.html` preview of the message.
+Note: In development, FakeEmailService writes the generated email to the SentEmails folder instead of sending it through SMTP.
+
+Note: If the database is missing or the migrations have not been applied:
+
+`dotnet ef database update --project Noticore.Infrastructure --startup-project Noticore.Api`
