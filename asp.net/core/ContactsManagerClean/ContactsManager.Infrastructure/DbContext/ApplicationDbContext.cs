@@ -32,7 +32,7 @@ namespace Entities
             //    new Country() { Id = Guid.Parse("6B820C12-FF44-4412-9E14-7941A869FB03"), Name = "USA" },
             //);
             string jsonCountries = File.ReadAllText("countries.json");
-            List<Country>? countries = JsonSerializer.Deserialize<List<Country>>(jsonCountries);
+            List<Country>? countries = JsonSerializer.Deserialize<List<Country>>(jsonCountries)!;
             foreach (var country in countries)
             {
                 modelBuilder.Entity<Country>().HasData(country);
@@ -41,7 +41,7 @@ namespace Entities
             // seeding the DB with initial data (people)
             // https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding
             string jsonPeople = File.ReadAllText("people.json");
-            List<Person>? people = JsonSerializer.Deserialize<List<Person>>(jsonPeople);
+            List<Person>? people = JsonSerializer.Deserialize<List<Person>>(jsonPeople)!;
             foreach (var person in people)
             {
                 modelBuilder.Entity<Person>().HasData(person);

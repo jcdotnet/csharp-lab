@@ -23,7 +23,7 @@ namespace ContactsManager.Core.DTO
                 Name = Name, 
                 Email = Email, 
                 BirthDate = BirthDate, 
-                Gender = (Gender)Enum.Parse(typeof(Gender), Gender, true), 
+                Gender = (Gender)Enum.Parse(typeof(Gender), Gender!, true), 
                 Address = Address, 
                 CountryId = CountryId,
                 ReceiveNewsletters = ReceiveNewsletters,

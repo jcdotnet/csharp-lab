@@ -248,7 +248,7 @@ namespace ContactsManager.ServiceTests
             // Assert
             getFilteredResponse.Should().BeEquivalentTo(expectedList);
             getFilteredResponse.Should()
-                .Contain(p => p.Name.Contains("ja", StringComparison.OrdinalIgnoreCase));
+                .Contain(p => p.Name != null && p.Name.Contains("ja", StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion

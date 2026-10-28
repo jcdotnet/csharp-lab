@@ -37,17 +37,17 @@ namespace Services
                 getFiltered = searchBy switch
                 {
                     nameof(PersonResponse.Name) => await _repository.GetFilteredContacts(p =>
-                        p.Name.Contains(search)),
+                        p.Name != null && p.Name.Contains(search)),
                     nameof(PersonResponse.Email) => await _repository.GetFilteredContacts(p =>
-                        p.Email.Contains(search)),
+                        p.Email != null && p.Email.Contains(search)),
                     nameof(PersonResponse.Address) => await _repository.GetFilteredContacts(p =>
-                        p.Address.Contains(search)),
+                        p.Address != null && p.Address.Contains(search)),
                     nameof(PersonResponse.BirthDate) => await _repository.GetFilteredContacts(p =>
-                        p.BirthDate.Value.ToString("dd MMMM yyyy").Contains(search)),
+                        p.BirthDate != null && p.BirthDate.Value.ToString("dd MMMM yyyy").Contains(search)),
                     nameof(PersonResponse.Gender) => await _repository.GetFilteredContacts(p =>
-                        p.Gender.Contains(search)),
+                        p.Gender != null && p.Gender.Contains(search)),
                     nameof(PersonResponse.CountryId) => await _repository.GetFilteredContacts(p =>
-                        p.Country.Name.Contains(search)),
+                        p.Country != null && p.Country.Name != null && p.Country.Name.Contains(search)),
                     _ => await _repository.GetContacts()
                 };
             return getFiltered.Select(p => p.ToPersonResponse()).ToList();
