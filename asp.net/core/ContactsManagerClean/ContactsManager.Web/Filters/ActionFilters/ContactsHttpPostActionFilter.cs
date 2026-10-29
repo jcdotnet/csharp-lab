@@ -3,72 +3,75 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
 
-namespace ContactsManager.Filters.ActionFilters
+namespace ContactsManager.Filters.ActionFilters;
+
+/// <summary>
+/// This action filter checks model validation before the action method executes
+/// and prepares the countries list when the submitted data is invalid
+/// </summary>
+public class ContactsHttpPostActionFilter : IAsyncActionFilter
 {
-    public class ContactsHttpPostActionFilter : IAsyncActionFilter
+    private readonly ICountriesGetterService _countriesService;
+    private readonly ILogger<ContactsHttpPostActionFilter> _logger;
+
+
+    public ContactsHttpPostActionFilter(ILogger<ContactsHttpPostActionFilter> logger, 
+        ICountriesGetterService countriesService)
     {
-        private readonly ICountriesGetterService _countriesService;
-        private readonly ILogger<ContactsListActionFilter> _logger;
+        _logger = logger;
+        _countriesService = countriesService;
+    }
 
-
-        public ContactsHttpPostActionFilter(ILogger<ContactsListActionFilter> logger, 
-            ICountriesGetterService countriesService)
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    {
+        // before logic
+        _logger.LogInformation("-----> {FilterName} ---> {MethodName} (before)",
+            nameof(ContactsListActionFilter),
+            nameof(OnActionExecutionAsync)
+        );
+        if (context.Controller is ContactsController controller)
         {
-            _logger = logger;
-            _countriesService = countriesService;
-        }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            // before logic
-            _logger.LogInformation("-----> {FilterName} ---> {MethodName} (before)",
-                nameof(ContactsListActionFilter),
-                nameof(OnActionExecutionAsync)
-            );
-            if (context.Controller is ContactsController controller)
+            if (!controller.ModelState.IsValid) // (!context.ModelState.IsValid) 
             {
-
-                if (!controller.ModelState.IsValid) // (!context.ModelState.IsValid) 
+                _logger.LogInformation("-----> {FilterName} ---> {MethodName} (validation logic)",
+                    nameof(ContactsListActionFilter),
+                    nameof(OnActionExecutionAsync)
+                );
+                // this happens when client side validations fails (very rarely)
+                var countries = await _countriesService.GetCountries();
+                controller.ViewBag.Countries = countries.Select(country => new SelectListItem()
                 {
-                    _logger.LogInformation("-----> {FilterName} ---> {MethodName} (validation logic)",
-                        nameof(ContactsListActionFilter),
-                        nameof(OnActionExecutionAsync)
-                    );
-                    // this happens when client side validations fails (very rarely)
-                    var countries = await _countriesService.GetCountries();
-                    controller.ViewBag.Countries = countries.Select(country => new SelectListItem()
-                    {
-                        Text = country.Name,
-                        Value = country.Id.ToString()
-                    });
+                    Text = country.Name,
+                    Value = country.Id.ToString()
+                });
 
-                    // using cllient server validation instead
-                    //controller.ViewBag.Errors = controller.ModelState.Values.SelectMany(v =>
-                    //v.Errors).Select(e => e.ErrorMessage).ToList();
+                // using cllient server validation instead
+                //controller.ViewBag.Errors = controller.ModelState.Values.SelectMany(v =>
+                //v.Errors).Select(e => e.ErrorMessage).ToList();
 
-                    var personRequest = context.ActionArguments["personRequest"];
-                    // short-curcuit request: returning any type of IActionResult
-                    context.Result = controller.View(personRequest);
-                    // not calling next to short-circuit the subsequent action filters & action method
-                    //await next();
-                    return; // added return to refactor the if/else code
-                }
-                else
-                {
-                    // modelstate is valid
-                    //await next();
-                }
+                var personRequest = context.ActionArguments["personRequest"];
+                // short-curcuit request: returning any type of IActionResult
+                context.Result = controller.View(personRequest);
+                // not calling next to short-circuit the subsequent action filters & action method
+                //await next();
+                return; // added return to refactor the if/else code
             }
             else
             {
-                // controller is not ContactsController
+                // modelstate is valid
                 //await next();
             }
-            await next(); // call the subsequent action filter or the action method
-            _logger.LogInformation("-----> {FilterName} ---> {MethodName} (after)",
-                nameof(ContactsListActionFilter),
-                nameof(OnActionExecutionAsync)
-            );
         }
+        else
+        {
+            // controller is not ContactsController
+            //await next();
+        }
+        await next(); // call the subsequent action filter or the action method
+        _logger.LogInformation("-----> {FilterName} ---> {MethodName} (after)",
+            nameof(ContactsListActionFilter),
+            nameof(OnActionExecutionAsync)
+        );
     }
 }

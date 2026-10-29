@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace ContactsManager.Filters.ResultFilters
-{
-    // result filters: last moment changes to the response
-    // not very used in real world projects compared to 
-    // action filters, auth filters or even resource filters
-    public class TokenResultFilter : IResultFilter
-    {
-        public void OnResultExecuted(ResultExecutedContext context)
-        {
-        }
+namespace ContactsManager.Filters.ResultFilters;
 
-        public void OnResultExecuting(ResultExecutingContext context)
-        {
-            context.HttpContext.Response.Cookies.Append("Auth-Key", "ExpectedValue");
-        }
+/// <summary>
+/// This result filter adds an Auth-Key cookie to the HTTP response before the result executes
+/// (final changes to the response but they are less common in real-world projects) 
+/// </summary>
+public class TokenResultFilter : IResultFilter
+{
+    public void OnResultExecuted(ResultExecutedContext context)
+    {
+    }
+
+    public void OnResultExecuting(ResultExecutingContext context)
+    {
+        context.HttpContext.Response.Cookies.Append("Auth-Key", "ExpectedValue");
     }
 }
