@@ -31,3 +31,6 @@ Console.WriteLine(student.GetNameLength());
 
 // Exception filters
 await ExceptionFilters.RunExamples();
+
+// Await in catch/finally blocks
+await AsyncExceptionHandling.RunExamples();
