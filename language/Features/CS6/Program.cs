@@ -2,6 +2,7 @@
 // https://learn.microsoft.com/en-us/shows/connecton-demand/211
 // https://learn.microsoft.com/en-us/archive/msdn-magazine/2014/october/csharp-the-new-and-improved-csharp-6-0
 using ClassLibrary;
+using CS6.ExceptionHandling;
 
 Console.WriteLine("C#6 features");
 
@@ -22,3 +23,6 @@ Console.WriteLine(Player.ArmedByKnife(player)); // null propagation operator
 // C#7 expands this syntax to cover constructors, finalizers, and property accessors
 // https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/expression-bodied-members
 Console.WriteLine(student.GetNameLength());
+
+// Exception filters
+await ExceptionFilters.RunExamples();
