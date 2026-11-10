@@ -32,7 +32,6 @@ if (args.Length == 1)
 // ClassName variableName = new(); // equivalent to new ClassName()
 Employee employee = new();
 //var employee = new(); // cannot be used with the var keyword (neither with foreach loops nor using blocks) 
-Player player = new(PlayerType.Elf);
 
 // improv: Pattern matching enhancement (relational and logical patterns)
 // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/patterns#relational-patterns
