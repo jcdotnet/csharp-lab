@@ -1,6 +1,6 @@
 ﻿namespace CS15.UnionTypes;
 
-public class Person
+public closed class Person
 {
     public AgeValue Age { get; set; }
 }

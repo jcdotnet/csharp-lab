@@ -7,9 +7,9 @@ public partial class UnionTypes
 {
     public static void Primitives()
     {
-        var john = new Person() { Age = 15 };
-        var jane = new Person() { Age = "20" };
-        var mary = new Person() { Age = DateTime.Today };   // newborn :)
+        var john = new Student() { Age = 15 };
+        var jane = new Student() { Age = "20" };
+        var mary = new Student() { Age = DateTime.Today };
 
         Console.WriteLine(john.Age.Value.GetType());        // System.Int32
         Console.WriteLine(jane.Age.Value.GetType());        // System.String
